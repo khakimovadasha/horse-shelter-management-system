@@ -1,10 +1,21 @@
+# Python backend
 backend/.venv/
 backend/.pytest_cache/
+backend/.env
+backend/alembic/__pycache__/
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Frontend
 frontend/node_modules/
 frontend/.quasar/
 frontend/dist/
 
-__pycache__/
-*.pyc
+# Env files
 .env
+
+# IDE
 .vscode/

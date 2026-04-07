@@ -1,43 +1,39 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
+  <q-layout view="hHh lpR fFf">
+    <q-header class="app-header">
+      <q-toolbar class="app-toolbar">
+        <RouterLink to="/" class="app-logo">
+          <div class="app-logo__mark">
+            <q-icon name="favorite" size="24px" />
+          </div>
 
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
+          <div class="app-logo__text">
+            <div>Приют для</div>
+            <div>лошадей</div>
+          </div>
+        </RouterLink>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <nav class="app-nav">
+          <RouterLink
+            v-for="item in navItems"
+            :key="item.to"
+            :to="item.to"
+            class="app-nav__link"
+            :class="{ 'app-nav__link--active': isActive(item.to) }"
+          >
+            <q-icon :name="item.icon" size="20px" />
+            <span>{{ item.label }}</span>
+          </RouterLink>
+        </nav>
+
+        <div class="app-user">
+          <q-avatar class="app-user__avatar" size="42px">
+            АП
+          </q-avatar>
+          <div class="app-user__name">Анна Петрова</div>
+        </div>
       </q-toolbar>
     </q-header>
-
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
 
     <q-page-container>
       <router-view />
@@ -46,57 +42,26 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
+import { useRoute } from 'vue-router'
 
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
+const route = useRoute()
+
+const navItems = [
+  { label: 'Главная', to: '/', icon: 'home' },
+  { label: 'Лошади', to: '/horses', icon: 'favorite_border' },
+  { label: 'Процедуры', to: '/procedures', icon: 'monitor_heart' },
+  { label: 'Задачи', to: '/tasks', icon: 'task_alt' },
+  { label: 'Календарь', to: '/calendar', icon: 'calendar_month' },
+  { label: 'Финансы', to: '/finances', icon: 'attach_money' },
+  { label: 'Отчёты', to: '/reports', icon: 'description' },
+  // { label: 'Пользователи', to: '/users', icon: 'group' },
 ]
 
-const leftDrawerOpen = ref(false)
+const isActive = (path) => {
+  if (path === '/') {
+    return route.path === '/'
+  }
 
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value
+  return route.path.startsWith(path)
 }
 </script>

@@ -46,7 +46,7 @@ class Horse(Base):
 
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     history: Mapped[str | None] = mapped_column(Text, nullable=True)
-    photo_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    photo_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
 
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
 

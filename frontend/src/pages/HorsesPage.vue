@@ -8,12 +8,11 @@
         </p>
       </div>
 
-      <q-btn
-        color="primary"
-        unelevated
-        no-caps
+      <AppButton
         icon="add"
         label="Добавить лошадь"
+        color="primary"
+        unelevated
         class="horses-page__add-btn"
       />
     </div>
@@ -39,11 +38,14 @@
       </div>
 
       <div v-else class="horses-grid">
-        <HorseCard
+        <router-link
           v-for="horse in filteredHorses"
           :key="horse.id"
-          :horse="horse"
-        />
+          :to="`/horses/${horse.id}`"
+          class="horse-card-link"
+        >
+          <HorseCard :horse="horse" />
+        </router-link>
       </div>
     </div>
   </q-page>
@@ -52,8 +54,9 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { getHorses } from 'src/api/horses'
-import HorseCard from 'src/components/HorseCard.vue'
-import HorsesFilters from 'src/components/HorsesFilters.vue'
+import HorseCard from 'src/components/blocks/HorseCard.vue'
+import HorsesFilters from 'src/components/blocks/HorsesFilters.vue'
+import AppButton from 'src/components/ui/AppButton.vue'
 
 const horses = ref([])
 const loading = ref(true)

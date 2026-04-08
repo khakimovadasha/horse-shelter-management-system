@@ -14,6 +14,11 @@ const routes = [
         component: () => import('pages/HorsesPage.vue'),
       },
       {
+        path: 'horses/:id',
+        name: 'horse',
+        component: () => import('pages/HorsePage.vue'),
+      },
+      {
         path: 'procedures',
         name: 'procedures',
         component: () => import('pages/ProceduresPage.vue'),

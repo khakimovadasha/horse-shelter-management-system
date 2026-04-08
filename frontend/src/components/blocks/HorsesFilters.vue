@@ -1,9 +1,7 @@
 <template>
   <q-card class="app-card horses-filters">
     <div class="horses-filters__grid horses-filters__grid--three">
-      <q-input
-        outlined
-        dense
+      <AppTextField
         clearable
         placeholder="Поиск по кличке..."
         class="horses-filters__field"
@@ -13,24 +11,16 @@
         <template #prepend>
           <q-icon name="search" />
         </template>
-      </q-input>
+      </AppTextField>
 
-      <q-select
-        outlined
-        dense
-        emit-value
-        map-options
+      <AppSelectField
         class="horses-filters__field"
         :model-value="status"
         :options="statusOptions"
         @update:model-value="$emit('update:status', $event)"
       />
 
-      <q-select
-        outlined
-        dense
-        emit-value
-        map-options
+      <AppSelectField
         class="horses-filters__field"
         :model-value="sort"
         :options="sortOptions"
@@ -41,6 +31,9 @@
 </template>
 
 <script setup>
+import AppSelectField from 'src/components/ui/AppSelectField.vue'
+import AppTextField from 'src/components/ui/AppTextField.vue'
+
 defineProps({
   search: {
     type: String,

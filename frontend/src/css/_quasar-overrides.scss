@@ -1,0 +1,22 @@
+.q-layout,
+.q-page,
+.q-page-container {
+  background: transparent;
+}
+
+.q-btn {
+  text-transform: none;
+}
+
+.q-focus-helper {
+  display: none;
+}
+
+.q-card {
+  box-shadow: none;
+  border-radius: var(--radius-md);
+}
+
+.q-chip {
+  font-weight: 600;
+}

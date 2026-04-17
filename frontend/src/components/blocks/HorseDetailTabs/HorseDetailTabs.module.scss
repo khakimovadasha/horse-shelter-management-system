@@ -1,0 +1,27 @@
+.root {
+  padding: 8px;
+  border-radius: 999px;
+  overflow-x: auto;
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+  gap: 8px;
+}
+
+.item {
+  min-height: 48px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.itemActive {
+  background: #ffffff;
+  box-shadow: var(--shadow-xs);
+}

@@ -3,6 +3,7 @@ backend/.venv/
 backend/.pytest_cache/
 backend/.env
 backend/alembic/__pycache__/
+backend/media/
 
 __pycache__/
 *.pyc

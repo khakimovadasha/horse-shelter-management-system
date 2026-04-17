@@ -1,23 +1,23 @@
 <template>
-  <q-card class="horse-card app-card app-clickable">
-    <div class="horse-card__image-wrap">
-      <img :src="imageSrc" :alt="horse.name" class="horse-card__image" />
+  <q-card :class="[$style.root, 'app-card', 'app-clickable']">
+    <div :class="$style.imageWrap">
+      <img :src="imageSrc" :alt="horse.name" :class="$style.image" />
 
       <AppStatusBadge
-        class="horse-card__status"
+        :class="$style.status"
         :label="statusLabel"
         :tone="statusTone"
       />
     </div>
 
-    <div class="horse-card__body">
-      <h3 class="horse-card__name">{{ horse.name }}</h3>
+    <div :class="$style.body">
+      <h3 :class="$style.name">{{ horse.name }}</h3>
 
-      <p class="horse-card__breed">
+      <p :class="$style.breed">
         {{ horse.breed || 'Порода не указана' }}
       </p>
 
-      <div class="horse-card__meta">
+      <div :class="$style.meta">
         <div><strong>Возраст:</strong> {{ ageLabel }}</div>
         <div><strong>Дата поступления:</strong> {{ arrivalDateLabel }}</div>
       </div>
@@ -27,7 +27,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import AppStatusBadge from 'src/components/ui/AppStatusBadge.vue'
+import AppStatusBadge from 'src/components/ui/AppStatusBadge/AppStatusBadge.vue'
 import {
   formatHorseAge,
   formatHorseArrivalDate,
@@ -49,3 +49,5 @@ const statusTone = computed(() => getHorseStatusTone(props.horse.status))
 const ageLabel = computed(() => formatHorseAge(props.horse.age))
 const arrivalDateLabel = computed(() => formatHorseArrivalDate(props.horse.arrival_date))
 </script>
+
+<style module lang="scss" src="./HorseCard.module.scss"></style>

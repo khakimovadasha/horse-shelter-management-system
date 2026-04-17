@@ -1,52 +1,51 @@
 <template>
   <q-layout view="hHh lpR fFf">
-    <q-header class="app-header">
-      <q-toolbar class="app-toolbar">
-        <div class="app-header__left">
+    <q-header :class="$style.header">
+      <q-toolbar :class="$style.toolbar">
+        <div :class="$style.headerLeft">
           <q-btn
             v-if="$q.screen.lt.lg"
             flat
             round
             dense
             icon="menu"
-            class="app-burger"
+            :class="$style.burger"
             aria-label="Открыть меню"
             @click="leftDrawerOpen = !leftDrawerOpen"
           />
 
-          <RouterLink to="/" class="app-logo">
-            <div class="app-logo__mark">
+          <RouterLink to="/" :class="$style.logo">
+            <div :class="$style.logoMark">
               <q-icon name="favorite" size="24px" />
             </div>
 
-            <div class="app-logo__text">
+            <div :class="$style.logoText">
               <div>Приют для</div>
               <div>лошадей</div>
             </div>
           </RouterLink>
         </div>
 
-        <nav v-if="$q.screen.gt.md" class="app-nav">
+        <nav v-if="$q.screen.gt.md" :class="$style.nav">
           <RouterLink
             v-for="item in navItems"
             :key="item.to"
             :to="item.to"
-            class="app-nav__link"
-            :class="{ 'app-nav__link--active': isActive(item.to) }"
+            :class="[$style.navLink, { [$style.navLinkActive]: isActive(item.to) }]"
           >
             <q-icon :name="item.icon" size="20px" />
             <span>{{ item.label }}</span>
           </RouterLink>
         </nav>
 
-        <div class="app-user" v-if="$q.screen.gt.sm">
-          <q-avatar class="app-user__avatar" size="42px">
+        <div v-if="$q.screen.gt.sm" :class="$style.user">
+          <q-avatar :class="$style.userAvatar" size="42px">
             АП
           </q-avatar>
-          <div class="app-user__name">Анна Петрова</div>
+          <div :class="$style.userName">Анна Петрова</div>
         </div>
 
-        <q-avatar v-else class="app-user__avatar" size="38px">
+        <q-avatar v-else :class="$style.userAvatar" size="38px">
           АП
         </q-avatar>
       </q-toolbar>
@@ -58,16 +57,16 @@
       overlay
       bordered
       :width="290"
-      class="app-drawer"
+      :class="$style.drawer"
     >
-      <div class="app-drawer__content">
-        <div class="app-drawer__top">
-          <RouterLink to="/" class="app-logo" @click="closeDrawer">
-            <div class="app-logo__mark">
+      <div :class="$style.drawerContent">
+        <div :class="$style.drawerTop">
+          <RouterLink to="/" :class="$style.logo" @click="closeDrawer">
+            <div :class="$style.logoMark">
               <q-icon name="favorite" size="24px" />
             </div>
 
-            <div class="app-logo__text">
+            <div :class="$style.logoText">
               <div>Приют для</div>
               <div>лошадей</div>
             </div>
@@ -83,14 +82,13 @@
           />
         </div>
 
-        <q-list class="app-drawer__nav">
+        <q-list :class="$style.drawerNav">
           <q-item
             v-for="item in navItems"
             :key="item.to"
             clickable
             :to="item.to"
-            class="app-drawer__item"
-            :class="{ 'app-drawer__item--active': isActive(item.to) }"
+            :class="[$style.drawerItem, { [$style.drawerItemActive]: isActive(item.to) }]"
             @click="closeDrawer"
           >
             <q-item-section avatar>
@@ -103,12 +101,12 @@
           </q-item>
         </q-list>
 
-        <div class="app-drawer__user">
-          <q-avatar class="app-user__avatar" size="42px">
+        <div :class="$style.drawerUser">
+          <q-avatar :class="$style.userAvatar" size="42px">
             АП
           </q-avatar>
           <div>
-            <div class="app-drawer__user-name">Анна Петрова</div>
+            <div :class="$style.drawerUserName">Анна Петрова</div>
           </div>
         </div>
       </div>
@@ -155,3 +153,5 @@ const closeDrawer = () => {
   }
 }
 </script>
+
+<style module lang="scss" src="./MainLayout.module.scss"></style>

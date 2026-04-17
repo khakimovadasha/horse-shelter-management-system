@@ -1,48 +1,48 @@
 <template>
-  <q-card class="app-card horse-profile-card">
-    <div class="horse-profile-card__top">
-      <div class="horse-profile-card__main">
-        <div class="horse-profile-card__image-wrap">
-          <img :src="imageSrc" :alt="horse.name" class="horse-profile-card__image" />
+  <q-card :class="[$style.root, 'app-card']">
+    <div :class="$style.top">
+      <div :class="$style.main">
+        <div :class="$style.imageWrap">
+          <img :src="imageSrc" :alt="horse.name" :class="$style.image" />
         </div>
 
-        <div class="horse-profile-card__content">
-          <div class="horse-profile-card__title-row">
+        <div :class="$style.content">
+          <div :class="$style.titleRow">
             <div>
-              <h1 class="horse-profile-card__name">{{ horse.name }}</h1>
+              <h1 :class="$style.name">{{ horse.name }}</h1>
 
               <AppStatusBadge
-                class="horse-profile-card__status"
+                :class="$style.status"
                 :label="statusLabel"
                 :tone="statusTone"
               />
             </div>
           </div>
 
-          <div class="horse-profile-card__info-grid">
+          <div :class="$style.infoGrid">
             <AppInfoItem
-              class="horse-profile-card__info-block"
+              :class="$style.infoBlock"
               label="Порода:"
               :value="horse.breed || 'Не указана'"
             />
             <AppInfoItem
-              class="horse-profile-card__info-block"
+              :class="$style.infoBlock"
               label="Возраст:"
               :value="ageLabel"
             />
             <AppInfoItem
-              class="horse-profile-card__info-block"
+              :class="$style.infoBlock"
               label="Куратор:"
               value="Не назначен"
             />
             <AppInfoItem
-              class="horse-profile-card__info-block"
+              :class="$style.infoBlock"
               label="Дата поступления:"
               :value="arrivalDateLabel"
             />
           </div>
 
-          <div class="horse-profile-card__description">
+          <div :class="$style.description">
             <AppInfoItem
               label="Описание:"
               :value="horse.description || 'Описание отсутствует'"
@@ -56,7 +56,7 @@
         no-caps
         icon="edit"
         label="Редактировать"
-        class="horse-profile-card__edit-btn"
+        :class="$style.editButton"
       />
     </div>
   </q-card>
@@ -64,9 +64,9 @@
 
 <script setup>
 import { computed } from 'vue'
-import AppButton from 'src/components/ui/AppButton.vue'
-import AppInfoItem from 'src/components/ui/AppInfoItem.vue'
-import AppStatusBadge from 'src/components/ui/AppStatusBadge.vue'
+import AppButton from 'src/components/ui/AppButton/AppButton.vue'
+import AppInfoItem from 'src/components/ui/AppInfoItem/AppInfoItem.vue'
+import AppStatusBadge from 'src/components/ui/AppStatusBadge/AppStatusBadge.vue'
 import {
   formatHorseAge,
   formatHorseArrivalDate,
@@ -88,3 +88,5 @@ const statusTone = computed(() => getHorseStatusTone(props.horse.status))
 const ageLabel = computed(() => formatHorseAge(props.horse.age))
 const arrivalDateLabel = computed(() => formatHorseArrivalDate(props.horse.arrival_date))
 </script>
+
+<style module lang="scss" src="./HorseProfileHeader.module.scss"></style>

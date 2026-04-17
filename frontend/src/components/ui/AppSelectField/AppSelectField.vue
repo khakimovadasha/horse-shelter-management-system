@@ -29,3 +29,5 @@ defineProps({
 
 defineEmits(['update:modelValue'])
 </script>
+
+<style module lang="scss" src="./AppSelectField.module.scss"></style>

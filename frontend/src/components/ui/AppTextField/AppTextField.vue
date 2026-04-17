@@ -30,3 +30,5 @@ defineProps({
 
 defineEmits(['update:modelValue'])
 </script>
+
+<style module lang="scss" src="./AppTextField.module.scss"></style>

@@ -47,3 +47,5 @@ defineProps({
   },
 })
 </script>
+
+<style module lang="scss" src="./AppButton.module.scss"></style>

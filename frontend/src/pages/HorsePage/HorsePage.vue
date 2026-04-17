@@ -1,15 +1,15 @@
 <template>
-  <q-page class="page-container horse-page">
-    <div v-if="loading" class="horses-page__state">
+  <q-page :class="['page-container', $style.page]">
+    <div v-if="loading" :class="$style.state">
       Загрузка...
     </div>
 
-    <div v-else-if="error" class="horses-page__state horses-page__state--error">
+    <div v-else-if="error" :class="[$style.state, $style.stateError]">
       Ошибка загрузки: {{ error }}
     </div>
 
     <template v-else-if="horse">
-      <router-link to="/horses" class="horse-detail-back">
+      <router-link to="/horses" :class="$style.backLink">
         <q-icon name="arrow_back" size="20px" />
         <span>Назад</span>
       </router-link>
@@ -28,9 +28,9 @@ import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { getHorseById } from 'src/api/horses'
 
-import HorseProfileHeader from 'src/components/blocks/HorseProfileHeader.vue'
-import HorseDetailTabs from 'src/components/blocks/HorseDetailTabs.vue'
-import HorseMedicalCardPanel from 'src/components/blocks/HorseMedicalCardPanel.vue'
+import HorseProfileHeader from 'src/components/blocks/HorseProfileHeader/HorseProfileHeader.vue'
+import HorseDetailTabs from 'src/components/blocks/HorseDetailTabs/HorseDetailTabs.vue'
+import HorseMedicalCardPanel from 'src/components/blocks/HorseMedicalCardPanel/HorseMedicalCardPanel.vue'
 
 const route = useRoute()
 
@@ -60,3 +60,5 @@ watch(
   }
 )
 </script>
+
+<style module lang="scss" src="./HorsePage.module.scss"></style>

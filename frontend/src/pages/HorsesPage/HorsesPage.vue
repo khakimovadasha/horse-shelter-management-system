@@ -1,6 +1,6 @@
 <template>
-  <q-page class="page-container">
-    <div class="horses-page__header">
+  <q-page :class="['page-container', $style.page]">
+    <div :class="$style.header">
       <div>
         <h1 class="page-title">Лошади</h1>
         <p class="page-subtitle">
@@ -13,7 +13,7 @@
         label="Добавить лошадь"
         color="primary"
         unelevated
-        class="horses-page__add-btn"
+        :class="$style.addButton"
       />
     </div>
 
@@ -25,24 +25,24 @@
     />
 
     <div class="q-mt-xl">
-      <div v-if="loading" class="horses-page__state">
+      <div v-if="loading" :class="$style.state">
         Загрузка...
       </div>
 
-      <div v-else-if="error" class="horses-page__state horses-page__state--error">
+      <div v-else-if="error" :class="[$style.state, $style.stateError]">
         Ошибка загрузки: {{ error }}
       </div>
 
-      <div v-else-if="filteredHorses.length === 0" class="horses-page__state">
+      <div v-else-if="filteredHorses.length === 0" :class="$style.state">
         По выбранным параметрам лошади не найдены.
       </div>
 
-      <div v-else class="horses-grid">
+      <div v-else :class="$style.grid">
         <router-link
           v-for="horse in filteredHorses"
           :key="horse.id"
           :to="`/horses/${horse.id}`"
-          class="horse-card-link"
+          :class="$style.cardLink"
         >
           <HorseCard :horse="horse" />
         </router-link>
@@ -54,9 +54,9 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { getHorses } from 'src/api/horses'
-import HorseCard from 'src/components/blocks/HorseCard.vue'
-import HorsesFilters from 'src/components/blocks/HorsesFilters.vue'
-import AppButton from 'src/components/ui/AppButton.vue'
+import HorseCard from 'src/components/blocks/HorseCard/HorseCard.vue'
+import HorsesFilters from 'src/components/blocks/HorsesFilters/HorsesFilters.vue'
+import AppButton from 'src/components/ui/AppButton/AppButton.vue'
 
 const horses = ref([])
 const loading = ref(true)
@@ -119,3 +119,5 @@ onMounted(async () => {
   }
 })
 </script>
+
+<style module lang="scss" src="./HorsesPage.module.scss"></style>

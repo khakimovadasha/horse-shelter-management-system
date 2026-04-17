@@ -1,59 +1,59 @@
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/MainLayout/MainLayout.vue'),
     children: [
       {
         path: '',
         name: 'dashboard',
-        component: () => import('pages/DashboardPage.vue'),
+        component: () => import('pages/DashboardPage/DashboardPage.vue'),
       },
       {
         path: 'horses',
         name: 'horses',
-        component: () => import('pages/HorsesPage.vue'),
+        component: () => import('pages/HorsesPage/HorsesPage.vue'),
       },
       {
         path: 'horses/:id',
         name: 'horse',
-        component: () => import('pages/HorsePage.vue'),
+        component: () => import('pages/HorsePage/HorsePage.vue'),
       },
       {
         path: 'procedures',
         name: 'procedures',
-        component: () => import('pages/ProceduresPage.vue'),
+        component: () => import('pages/ProceduresPage/ProceduresPage.vue'),
       },
       {
         path: 'tasks',
         name: 'tasks',
-        component: () => import('pages/TasksPage.vue'),
+        component: () => import('pages/TasksPage/TasksPage.vue'),
       },
       {
         path: 'calendar',
         name: 'calendar',
-        component: () => import('pages/CalendarPage.vue'),
+        component: () => import('pages/CalendarPage/CalendarPage.vue'),
       },
       {
         path: 'finances',
         name: 'finances',
-        component: () => import('pages/FinancesPage.vue'),
+        component: () => import('pages/FinancesPage/FinancesPage.vue'),
       },
       {
         path: 'reports',
         name: 'reports',
-        component: () => import('pages/ReportsPage.vue'),
+        component: () => import('pages/ReportsPage/ReportsPage.vue'),
       },
       {
         path: 'users',
         name: 'users',
-        component: () => import('pages/UsersPage.vue'),
+        component: () => import('pages/UsersPage/UsersPage.vue'),
       },
     ],
   },
 
   {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue'),
+    component: () => import('pages/ErrorNotFound/ErrorNotFound.vue'),
   },
 ]
 

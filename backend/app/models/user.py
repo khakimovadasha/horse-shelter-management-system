@@ -15,11 +15,9 @@ class User(Base):
     hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
     first_name: Mapped[str] = mapped_column(String(32), nullable=False)
     last_name: Mapped[str] = mapped_column(String(32), nullable=False)
-    patronymic: Mapped[str | None] = mapped_column(String(32), nullable=True)
     phone: Mapped[str | None] = mapped_column(String(20), nullable=True)
 
     role_id: Mapped[int] = mapped_column(ForeignKey("roles.id"), nullable=False)
-
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
 
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
@@ -29,4 +27,3 @@ class User(Base):
         onupdate=datetime.utcnow,
         nullable=False,
     )
-    last_login_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)

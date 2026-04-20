@@ -5,11 +5,11 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
-from app.core.security import create_access_token, verify_password
+from app.core.security import create_access_token, verify_password, get_password_hash
 from app.db.session import get_db
 from app.models.role import Role
 from app.models.user import User
-from app.schemas.auth import LoginRequest, MeResponse, TokenResponse
+from app.schemas.auth import LoginRequest, MeResponse, TokenResponse, RegisterRequest, RegisterResponse
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 security = HTTPBearer()
@@ -45,6 +45,46 @@ def get_current_user(
         raise credentials_exception
 
     return user
+
+@router.post("/register", response_model=RegisterResponse)
+def register(data: RegisterRequest, db: Session = Depends(get_db)):
+    existing_email = db.execute(select(User).where(User.email == data.email)).scalar_one_or_none()
+    if existing_email:
+        raise HTTPException(status_code=400, detail="Email уже зарегистрирован")
+
+    if data.username:
+        existing_username = db.execute(select(User).where(User.username == data.username)).scalar_one_or_none()
+        if existing_username:
+            raise HTTPException(status_code=400, detail="Username уже занят")
+
+    user_role = db.execute(select(Role).where(Role.code == "user")).scalar_one_or_none()
+    if user_role is None:
+        raise HTTPException(status_code=500, detail="Роль user не найдена")
+
+    new_user = User(
+        email=data.email,
+        username=data.username,
+        hashed_password=get_password_hash(data.password),
+        first_name=data.first_name,
+        last_name=data.last_name,
+        phone=data.phone,
+        role_id=user_role.id,
+        is_active=True,
+    )
+
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+
+    return RegisterResponse(
+        id=new_user.id,
+        email=new_user.email,
+        username=new_user.username,
+        first_name=new_user.first_name,
+        last_name=new_user.last_name,
+        phone=new_user.phone,
+        role=user_role.code,
+    )
 
 
 @router.post("/login", response_model=TokenResponse)

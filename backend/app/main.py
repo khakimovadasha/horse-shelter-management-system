@@ -3,6 +3,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.horses import router as horses_router
+from app.api.auth import router as auth_router
 
 app = FastAPI(title="Horse Shelter API")
 
@@ -18,6 +19,8 @@ app.add_middleware(
 )
 
 app.include_router(horses_router, prefix="/api")
+app.include_router(auth_router, prefix="/api")
+
 app.mount("/media", StaticFiles(directory="media"), name="media")
 
 

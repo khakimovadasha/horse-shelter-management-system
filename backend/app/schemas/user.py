@@ -10,3 +10,6 @@ class UserRead(BaseModel):
     phone: str | None
     is_active: bool
     role: str
+
+class UpdateUserRoleRequest(BaseModel):
+    role: str

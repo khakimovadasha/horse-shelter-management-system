@@ -129,19 +129,19 @@ const $q = useQuasar()
 const leftDrawerOpen = ref(false)
 
 const navItems = [
-  { label: 'Главная', to: '/', icon: 'home' },
-  { label: 'Лошади', to: '/horses', icon: 'favorite_border' },
-  { label: 'Процедуры', to: '/procedures', icon: 'monitor_heart' },
-  { label: 'Задачи', to: '/tasks', icon: 'task_alt' },
-  { label: 'Календарь', to: '/calendar', icon: 'calendar_month' },
-  { label: 'Финансы', to: '/finances', icon: 'attach_money' },
-  { label: 'Отчёты', to: '/reports', icon: 'description' },
+  { label: 'Главная', to: '/app', icon: 'home' },
+  { label: 'Лошади', to: '/app/horses', icon: 'favorite_border' },
+  { label: 'Процедуры', to: '/app/procedures', icon: 'monitor_heart' },
+  { label: 'Задачи', to: '/app/tasks', icon: 'task_alt' },
+  { label: 'Календарь', to: '/app/calendar', icon: 'calendar_month' },
+  { label: 'Финансы', to: '/app/finances', icon: 'attach_money' },
+  { label: 'Отчёты', to: '/app/reports', icon: 'description' },
   // { label: 'Пользователи', to: '/users', icon: 'group' },
 ]
 
 const isActive = (path) => {
-  if (path === '/') {
-    return route.path === '/'
+  if (path === '/app') {
+    return route.path === '/app'
   }
 
   return route.path.startsWith(path)

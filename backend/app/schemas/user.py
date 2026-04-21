@@ -13,3 +13,6 @@ class UserRead(BaseModel):
 
 class UpdateUserRoleRequest(BaseModel):
     role: str
+
+class UpdateUserActiveRequest(BaseModel):
+    is_active: bool

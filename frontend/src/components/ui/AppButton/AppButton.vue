@@ -3,7 +3,7 @@
     v-bind="$attrs"
     :color="color"
     :label="label"
-    :icon="icon"
+    :icon="icon || undefined"
     :outline="outline"
     :unelevated="unelevated"
     :no-caps="noCaps"

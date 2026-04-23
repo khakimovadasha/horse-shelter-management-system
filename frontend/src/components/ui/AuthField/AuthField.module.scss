@@ -1,0 +1,42 @@
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.label {
+  font-size: 13px;
+  line-height: 1.3;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.input {
+  :global(.q-field) {
+    margin: 0;
+  }
+
+  :global(.q-field__bottom) {
+    display: none;
+  }
+
+  :global(.q-field__control) {
+    height: 40px;
+    border-radius: 12px;
+  }
+
+  :global(.q-field__native),
+  :global(.q-field__input) {
+    font-size: 14px;
+  }
+
+  :global(.q-field__append) {
+    padding-right: 8px;
+  }
+}
+
+.eyeIcon {
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 20px;
+}

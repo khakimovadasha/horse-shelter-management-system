@@ -1,10 +1,6 @@
-import axios from 'axios'
+import { api, API_BASE_URL } from 'src/boot/axios'
 
-const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api',
-})
-
-export const API_BASE_URL = 'http://127.0.0.1:8000'
+export { API_BASE_URL }
 
 export const getHorses = async () => {
   const response = await api.get('/horses/')

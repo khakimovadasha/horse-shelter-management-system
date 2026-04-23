@@ -1,0 +1,22 @@
+.page {
+  background: transparent;
+}
+
+.fieldsRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+
+.error {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #d14343;
+}
+
+@media (max-width: 640px) {
+  .fieldsRow {
+    grid-template-columns: 1fr;
+  }
+}

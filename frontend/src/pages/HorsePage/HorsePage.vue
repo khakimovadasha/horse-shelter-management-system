@@ -9,7 +9,7 @@
     </div>
 
     <template v-else-if="horse">
-      <router-link to="/horses" :class="$style.backLink">
+      <router-link to="/app/horses" :class="$style.backLink">
         <q-icon name="arrow_back" size="20px" />
         <span>Назад</span>
       </router-link>

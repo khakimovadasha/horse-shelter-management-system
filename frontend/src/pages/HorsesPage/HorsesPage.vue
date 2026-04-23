@@ -41,7 +41,7 @@
         <router-link
           v-for="horse in filteredHorses"
           :key="horse.id"
-          :to="`/horses/${horse.id}`"
+          :to="`/app/horses/${horse.id}`"
           :class="$style.cardLink"
         >
           <HorseCard :horse="horse" />

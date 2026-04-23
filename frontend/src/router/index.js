@@ -1,5 +1,6 @@
 import { defineRouter } from '#q-app/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
+import { getAccessToken } from 'src/api/auth'
 import routes from './routes'
 
 /*
@@ -24,6 +25,22 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE)
+  })
+
+  Router.beforeEach((to) => {
+    const isPrivateRoute = to.path.startsWith('/app')
+    const isAuthRoute = to.name === 'login' || to.name === 'register'
+    const hasToken = Boolean(getAccessToken())
+
+    if (isPrivateRoute && !hasToken) {
+      return { name: 'login' }
+    }
+
+    if (isAuthRoute && hasToken) {
+      return { name: 'dashboard' }
+    }
+
+    return true
   })
 
   return Router

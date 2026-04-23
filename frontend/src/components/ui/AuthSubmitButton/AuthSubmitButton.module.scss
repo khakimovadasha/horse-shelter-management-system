@@ -1,0 +1,11 @@
+.button {
+  margin-top: 4px;
+  :global(.q-btn) {
+    width: 100%;
+    min-height: 42px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    box-shadow: 0 10px 20px rgba(80, 117, 80, 0.16);
+  }
+}

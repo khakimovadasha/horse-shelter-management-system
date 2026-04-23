@@ -43,11 +43,31 @@
             АП
           </q-avatar>
           <div :class="$style.userName">Анна Петрова</div>
+          <q-btn
+            flat
+            round
+            dense
+            icon="logout"
+            :class="$style.logoutButton"
+            aria-label="Выйти"
+            @click="handleLogout"
+          />
         </div>
 
-        <q-avatar v-else :class="$style.userAvatar" size="38px">
-          АП
-        </q-avatar>
+        <div v-else :class="$style.userCompact">
+          <q-avatar :class="$style.userAvatar" size="38px">
+            АП
+          </q-avatar>
+          <q-btn
+            flat
+            round
+            dense
+            icon="logout"
+            :class="$style.logoutButton"
+            aria-label="Выйти"
+            @click="handleLogout"
+          />
+        </div>
       </q-toolbar>
     </q-header>
 
@@ -108,6 +128,15 @@
           <div>
             <div :class="$style.drawerUserName">Анна Петрова</div>
           </div>
+          <q-btn
+            flat
+            round
+            dense
+            icon="logout"
+            :class="$style.drawerLogoutButton"
+            aria-label="Выйти"
+            @click="handleLogout"
+          />
         </div>
       </div>
     </q-drawer>
@@ -120,10 +149,12 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
+import { removeAccessToken } from 'src/api/auth'
 
 const route = useRoute()
+const router = useRouter()
 const $q = useQuasar()
 
 const leftDrawerOpen = ref(false)
@@ -151,6 +182,12 @@ const closeDrawer = () => {
   if ($q.screen.lt.lg) {
     leftDrawerOpen.value = false
   }
+}
+
+const handleLogout = async () => {
+  removeAccessToken()
+  leftDrawerOpen.value = false
+  await router.push('/login')
 }
 </script>
 

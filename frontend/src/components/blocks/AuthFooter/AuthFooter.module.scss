@@ -1,0 +1,17 @@
+.footerText {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.footerLink {
+  margin-left: 6px;
+  color: var(--green);
+  font-weight: 700;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

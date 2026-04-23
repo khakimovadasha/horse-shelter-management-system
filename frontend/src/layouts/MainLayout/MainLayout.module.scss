@@ -103,6 +103,13 @@
   flex-shrink: 0;
 }
 
+.userCompact {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
 .userAvatar {
   width: 42px;
   height: 42px;
@@ -121,6 +128,15 @@
   font-weight: 600;
   color: #2d2f33;
   white-space: nowrap;
+}
+
+.logoutButton {
+  color: var(--text-secondary);
+
+  &:hover {
+    color: var(--green);
+    background: #f2f4ef;
+  }
 }
 
 .drawer {
@@ -171,6 +187,16 @@
   gap: 12px;
   padding: 16px 10px 6px;
   border-top: 1px solid var(--border);
+}
+
+.drawerLogoutButton {
+  margin-left: auto;
+  color: var(--text-secondary);
+
+  &:hover {
+    color: var(--green);
+    background: #f2f4ef;
+  }
 }
 
 .drawerUserName {

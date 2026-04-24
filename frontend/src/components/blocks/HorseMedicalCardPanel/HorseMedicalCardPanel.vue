@@ -59,8 +59,8 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
-import { getHorseMedicalRecords } from 'src/api/horses'
+import { computed, onMounted, watch } from 'vue'
+import { useMedicalRecordsStore } from 'src/stores/medicalRecords'
 import AppButton from 'src/components/ui/AppButton/AppButton.vue'
 
 const props = defineProps({
@@ -70,9 +70,13 @@ const props = defineProps({
   },
 })
 
-const records = ref([])
-const loading = ref(false)
-const error = ref('')
+const medicalRecordsStore = useMedicalRecordsStore()
+
+const horseId = computed(() => String(props.horseId))
+const records = computed(() => medicalRecordsStore.itemsByHorseId[horseId.value] || [])
+const loading = computed(() => Boolean(medicalRecordsStore.loadingByHorseId[horseId.value]))
+const error = computed(() => medicalRecordsStore.errorByHorseId[horseId.value] || '')
+
 const recordTypeLabels = {
   inspection: 'Осмотр',
   diagnosis: 'Диагноз',
@@ -83,17 +87,7 @@ const recordTypeLabels = {
 }
 
 const loadMedicalRecords = async () => {
-  loading.value = true
-  error.value = ''
-
-  try {
-    records.value = await getHorseMedicalRecords(props.horseId)
-  } catch (err) {
-    error.value =
-      err.response?.data?.detail || err.message || 'Не удалось загрузить медицинские записи'
-  } finally {
-    loading.value = false
-  }
+  await medicalRecordsStore.fetchHorseMedicalRecords(horseId.value).catch(() => {})
 }
 
 const formatDate = (value) => {

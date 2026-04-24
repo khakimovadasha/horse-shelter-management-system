@@ -8,7 +8,7 @@
 
         <div :class="$style.content">
           <div :class="$style.titleRow">
-            <div>
+            <div :class="$style.titleBlock">
               <h1 :class="$style.name">{{ horse.name }}</h1>
 
               <AppStatusBadge
@@ -17,14 +17,18 @@
                 :tone="statusTone"
               />
             </div>
+
+            <AppButton
+              outline
+              no-caps
+              icon="edit"
+              label=""
+              dense
+              :class="[$style.editButton, $style.editButtonMobile]"
+            />
           </div>
 
           <div :class="$style.infoGrid">
-            <AppInfoItem
-              :class="$style.infoBlock"
-              label="Порода:"
-              :value="horse.breed || 'Не указана'"
-            />
             <AppInfoItem
               :class="$style.infoBlock"
               label="Возраст:"
@@ -32,13 +36,18 @@
             />
             <AppInfoItem
               :class="$style.infoBlock"
-              label="Куратор:"
-              value="Не назначен"
+              label="Порода:"
+              :value="horse.breed || 'Не указана'"
             />
             <AppInfoItem
               :class="$style.infoBlock"
               label="Дата поступления:"
               :value="arrivalDateLabel"
+            />
+            <AppInfoItem
+              :class="$style.infoBlock"
+              label="Куратор:"
+              value="Не назначен"
             />
           </div>
 
@@ -48,6 +57,13 @@
               :value="horse.description || 'Описание отсутствует'"
             />
           </div>
+
+          <div :class="[$style.history, $style.historyInline]">
+            <div :class="$style.historyLabel">История:</div>
+            <div :class="$style.historyValue">
+              {{ horse.history || 'История отсутствует' }}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -55,9 +71,16 @@
         outline
         no-caps
         icon="edit"
-        label="Редактировать"
-        :class="$style.editButton"
+        label=""
+        :class="[$style.editButton, $style.editButtonDesktop]"
       />
+    </div>
+
+    <div :class="[$style.history, $style.historyBelow]">
+      <div :class="$style.historyLabel">История:</div>
+      <div :class="$style.historyValue">
+        {{ horse.history || 'История отсутствует' }}
+      </div>
     </div>
   </q-card>
 </template>

@@ -37,22 +37,36 @@
         По выбранным параметрам лошади не найдены.
       </div>
 
-      <div v-else :class="$style.grid">
-        <router-link
-          v-for="horse in filteredHorses"
-          :key="horse.id"
-          :to="`/app/horses/${horse.id}`"
-          :class="$style.cardLink"
-        >
-          <HorseCard :horse="horse" />
-        </router-link>
-      </div>
+      <template v-else>
+        <div :class="$style.grid">
+          <router-link
+            v-for="horse in paginatedHorses"
+            :key="horse.id"
+            :to="`/app/horses/${horse.id}`"
+            :class="$style.cardLink"
+          >
+            <HorseCard :horse="horse" />
+          </router-link>
+        </div>
+
+        <div v-if="totalPages > 1" :class="$style.pagination">
+          <q-pagination
+            v-model="currentPage"
+            :max="totalPages"
+            :max-pages="6"
+            direction-links
+            boundary-links
+            color="primary"
+            active-design="unelevated"
+          />
+        </div>
+      </template>
     </div>
   </q-page>
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import HorseCard from 'src/components/blocks/HorseCard/HorseCard.vue'
 import HorsesFilters from 'src/components/blocks/HorsesFilters/HorsesFilters.vue'
@@ -62,9 +76,12 @@ import { useHorsesStore } from 'src/stores/horses'
 const horsesStore = useHorsesStore()
 const { items: horses, loading, error } = storeToRefs(horsesStore)
 
+const PAGE_SIZE = 6
+
 const searchQuery = ref('')
 const selectedStatus = ref('all')
 const selectedSort = ref('name_asc')
+const currentPage = ref(1)
 
 const statusOrder = {
   sick: 1,
@@ -107,6 +124,26 @@ const filteredHorses = computed(() => {
   }
 
   return result
+})
+
+const totalPages = computed(() => {
+  return Math.max(1, Math.ceil(filteredHorses.value.length / PAGE_SIZE))
+})
+
+const paginatedHorses = computed(() => {
+  const startIndex = (currentPage.value - 1) * PAGE_SIZE
+  const endIndex = startIndex + PAGE_SIZE
+  return filteredHorses.value.slice(startIndex, endIndex)
+})
+
+watch([searchQuery, selectedStatus, selectedSort], () => {
+  currentPage.value = 1
+})
+
+watch(totalPages, (pages) => {
+  if (currentPage.value > pages) {
+    currentPage.value = pages
+  }
 })
 
 onMounted(async () => {

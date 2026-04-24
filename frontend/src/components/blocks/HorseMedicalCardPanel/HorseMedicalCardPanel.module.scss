@@ -33,10 +33,19 @@
   padding-left: 34px;
 }
 
+.state {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.stateError {
+  color: #b3261e;
+}
+
 .line {
   position: absolute;
   top: 12px;
-  left: 9px;
+  left: 6px;
   bottom: 0;
   width: 2px;
   background: #d9ded5;
@@ -44,6 +53,10 @@
 
 .timelineItem {
   position: relative;
+
+  & + & {
+    margin-top: 28px;
+  }
 }
 
 .dot {
@@ -58,6 +71,7 @@
 
 .timelineContent {
   padding-left: 0;
+  max-width: 780px;
 }
 
 .meta {
@@ -88,11 +102,18 @@
 .text {
   margin-top: 10px;
   font-size: 1rem;
+  line-height: 1.55;
   color: var(--text-secondary);
+  max-width: 760px;
 }
 
 @media (max-width: 768px) {
   .root {
     padding: 20px;
+  }
+
+  .timelineContent,
+  .text {
+    max-width: 100%;
   }
 }

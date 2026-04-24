@@ -18,7 +18,7 @@
 
       <HorseDetailTabs class="q-mt-lg" />
 
-      <HorseMedicalCardPanel class="q-mt-lg" />
+      <HorseMedicalCardPanel :horse-id="horse.id" class="q-mt-lg" />
     </template>
   </q-page>
 </template>

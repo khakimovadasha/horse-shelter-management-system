@@ -53,14 +53,14 @@
 
 <script setup>
 import { computed, onMounted, ref } from 'vue'
-import { getHorses } from 'src/api/horses'
+import { storeToRefs } from 'pinia'
 import HorseCard from 'src/components/blocks/HorseCard/HorseCard.vue'
 import HorsesFilters from 'src/components/blocks/HorsesFilters/HorsesFilters.vue'
 import AppButton from 'src/components/ui/AppButton/AppButton.vue'
+import { useHorsesStore } from 'src/stores/horses'
 
-const horses = ref([])
-const loading = ref(true)
-const error = ref('')
+const horsesStore = useHorsesStore()
+const { items: horses, loading, error } = storeToRefs(horsesStore)
 
 const searchQuery = ref('')
 const selectedStatus = ref('all')
@@ -110,13 +110,7 @@ const filteredHorses = computed(() => {
 })
 
 onMounted(async () => {
-  try {
-    horses.value = await getHorses()
-  } catch (err) {
-    error.value = err.message || 'Не удалось загрузить список лошадей'
-  } finally {
-    loading.value = false
-  }
+  await horsesStore.fetchHorses().catch(() => {})
 })
 </script>
 

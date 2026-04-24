@@ -24,31 +24,24 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { getHorseById } from 'src/api/horses'
+import { useHorseDetailsStore } from 'src/stores/horseDetails'
 
 import HorseProfileHeader from 'src/components/blocks/HorseProfileHeader/HorseProfileHeader.vue'
 import HorseDetailTabs from 'src/components/blocks/HorseDetailTabs/HorseDetailTabs.vue'
 import HorseMedicalCardPanel from 'src/components/blocks/HorseMedicalCardPanel/HorseMedicalCardPanel.vue'
 
 const route = useRoute()
+const horseDetailsStore = useHorseDetailsStore()
 
-const horse = ref(null)
-const loading = ref(true)
-const error = ref('')
+const horseId = computed(() => String(route.params.id))
+const horse = computed(() => horseDetailsStore.items[horseId.value] || null)
+const loading = computed(() => Boolean(horseDetailsStore.loadingById[horseId.value]))
+const error = computed(() => horseDetailsStore.errorById[horseId.value] || '')
 
 const loadHorse = async () => {
-  loading.value = true
-  error.value = ''
-
-  try {
-    horse.value = await getHorseById(route.params.id)
-  } catch (err) {
-    error.value = err.response?.data?.detail || err.message || 'Не удалось загрузить данные лошади'
-  } finally {
-    loading.value = false
-  }
+  await horseDetailsStore.fetchHorse(horseId.value).catch(() => {})
 }
 
 onMounted(loadHorse)

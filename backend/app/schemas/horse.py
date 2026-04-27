@@ -14,6 +14,7 @@ class HorseRead(BaseModel):
     arrival_date: date
     status: HorseStatus
     curator_id: int | None = None
+    curator_name: str | None = None
     description: str | None = None
     history: str | None = None
     photo_url: str | None = None

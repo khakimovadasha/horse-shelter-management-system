@@ -9,7 +9,13 @@ from app.core.security import create_access_token, verify_password, get_password
 from app.db.session import get_db
 from app.models.role import Role
 from app.models.user import User
-from app.schemas.auth import LoginRequest, MeResponse, TokenResponse, RegisterRequest, RegisterResponse
+from app.schemas.auth import (
+    LoginRequest,
+    MeResponse,
+    TokenResponse,
+    RegisterRequest,
+    RegisterResponse,
+)
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 security = HTTPBearer()
@@ -46,18 +52,39 @@ def get_current_user(
 
     return user
 
+
+def require_admin(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> User:
+    role = db.execute(
+        select(Role).where(Role.id == current_user.role_id)
+    ).scalar_one_or_none()
+
+    if role is None or role.code != "admin":
+        raise HTTPException(status_code=403, detail="Нет доступа")
+
+    return current_user
+
+
 @router.post("/register", response_model=RegisterResponse)
 def register(data: RegisterRequest, db: Session = Depends(get_db)):
-    existing_email = db.execute(select(User).where(User.email == data.email)).scalar_one_or_none()
+    existing_email = db.execute(
+        select(User).where(User.email == data.email)
+    ).scalar_one_or_none()
     if existing_email:
         raise HTTPException(status_code=400, detail="Email уже зарегистрирован")
 
     if data.username:
-        existing_username = db.execute(select(User).where(User.username == data.username)).scalar_one_or_none()
+        existing_username = db.execute(
+            select(User).where(User.username == data.username)
+        ).scalar_one_or_none()
         if existing_username:
             raise HTTPException(status_code=400, detail="Username уже занят")
 
-    user_role = db.execute(select(Role).where(Role.code == "user")).scalar_one_or_none()
+    user_role = db.execute(
+        select(Role).where(Role.code == "user")
+    ).scalar_one_or_none()
     if user_role is None:
         raise HTTPException(status_code=500, detail="Роль user не найдена")
 

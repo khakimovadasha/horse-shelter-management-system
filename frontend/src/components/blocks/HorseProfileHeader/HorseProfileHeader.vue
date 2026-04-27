@@ -47,7 +47,7 @@
             <AppInfoItem
               :class="$style.infoBlock"
               label="Куратор:"
-              value="Не назначен"
+              :value="horse.curator_name || 'Не назначен'"
             />
           </div>
 

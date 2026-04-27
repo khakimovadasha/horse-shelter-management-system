@@ -1,184 +1,177 @@
 <template>
-  <q-dialog
+  <AppFormDialog
     :model-value="modelValue"
+    title="Добавить лошадь"
+    subtitle="Заполните информацию о новой лошади"
     @update:model-value="handleDialogToggle"
   >
-    <q-card :class="$style.dialog">
-      <div :class="$style.header">
-        <div>
-          <div :class="$style.title">Добавить лошадь</div>
-          <div :class="$style.subtitle">Заполните информацию о новой лошади</div>
-        </div>
+    <q-form :class="$style.form" @submit.prevent="handleSubmit">
+      <div :class="$style.fieldsRow">
+        <AppFormField label="Кличка">
+          <AppTextField
+            v-model="form.name"
+            hide-bottom-space
+            :class="$style.control"
+            placeholder="Введите кличку"
+            :error="Boolean(errors.name)"
+            :error-message="errors.name"
+          />
+        </AppFormField>
 
-        <q-btn
-          flat
-          round
-          dense
-          icon="close"
-          aria-label="Закрыть"
-          @click="closeDialog"
-        />
+        <AppFormField label="Порода">
+          <AppTextField
+            v-model="form.breed"
+            hide-bottom-space
+            :class="$style.control"
+            placeholder="Введите породу"
+            :error="Boolean(errors.breed)"
+            :error-message="errors.breed"
+          />
+        </AppFormField>
       </div>
 
-      <q-form :class="$style.form" @submit.prevent="handleSubmit">
-        <div :class="$style.gridMain">
-          <div :class="$style.field">
-            <label :class="$style.label">Кличка</label>
-            <AppTextField
-              v-model="form.name"
-              :class="$style.control"
-              placeholder="Введите кличку"
-              :error="Boolean(errors.name)"
-              :error-message="errors.name"
-            />
-          </div>
-
-          <div :class="$style.field">
-            <label :class="$style.label">Порода</label>
-            <AppTextField
-              v-model="form.breed"
-              :class="$style.control"
-              placeholder="Введите породу"
-              :error="Boolean(errors.breed)"
-              :error-message="errors.breed"
-            />
-          </div>
-
-          <div :class="$style.field">
-            <label :class="$style.label">Возраст</label>
-            <AppTextField
-              v-model="form.age"
-              :class="$style.control"
-              type="number"
-              min="0"
-              max="50"
-              placeholder="Возраст (лет)"
-              :error="Boolean(errors.age)"
-              :error-message="errors.age"
-            />
-          </div>
-
-          <div :class="$style.field">
-            <label :class="$style.label">Пол</label>
-            <AppSelectField
-              v-model="form.gender"
-              :class="$style.control"
-              :options="genderOptions"
-              placeholder="Выберите пол"
-              :error="Boolean(errors.gender)"
-              :error-message="errors.gender"
-            />
-          </div>
-
-          <div :class="$style.field">
-            <label :class="$style.label">Статус</label>
-            <AppSelectField
-              v-model="form.status"
-              :class="$style.control"
-              :options="statusOptions"
-              placeholder="Выберите статус"
-              :error="Boolean(errors.status)"
-              :error-message="errors.status"
-            />
-          </div>
-
-          <div :class="$style.field">
-            <label :class="$style.label">Куратор</label>
-            <AppSelectField
-              v-model="form.curatorId"
-              :class="$style.control"
-              :options="filteredCuratorOptions"
-              placeholder="Выберите куратора"
-              clearable
-              use-input
-              fill-input
-              hide-selected
-              input-debounce="0"
-              @filter="filterCurators"
-            />
-          </div>
-        </div>
-
-        <div :class="$style.gridTwo">
-          <div :class="$style.field">
-            <label :class="$style.label">Масть</label>
-            <AppTextField
-              v-model="form.color"
-              :class="$style.control"
-              placeholder="Введите масть"
-              :error="Boolean(errors.color)"
-              :error-message="errors.color"
-            />
-          </div>
-
-          <div :class="$style.field">
-            <label :class="$style.label">Фото</label>
-            <AppFileField
-              v-model="form.photo"
-              :class="$style.control"
-              accept="image/*"
-              clearable
-              :error="Boolean(errors.photo)"
-              :error-message="errors.photo"
-              label="Выберите изображение"
-            />
-          </div>
-
-          <div :class="$style.field">
-            <label :class="$style.label">Описание</label>
-            <AppTextField
-              v-model="form.description"
-              :class="[$style.control, $style.controlTextarea]"
-              type="textarea"
-              autogrow
-              placeholder="Краткое описание"
-            :error="Boolean(errors.description)"
-              :error-message="errors.description"
-            />
-          </div>
-
-          <div :class="$style.field">
-            <label :class="$style.label">История</label>
-            <AppTextField
-              v-model="form.history"
-              :class="[$style.control, $style.controlTextarea]"
-              type="textarea"
-              autogrow
-              placeholder="История лошади"
-            :error="Boolean(errors.history)"
-              :error-message="errors.history"
-            />
-          </div>
-        </div>
-
-        <div :class="$style.actions">
-          <AppButton
-            outline
-            no-caps
-            label="Отмена"
-            type="button"
-            :disable="submitting"
-            @click="closeDialog"
+      <div :class="$style.fieldsRow">
+        <AppFormField label="Возраст">
+          <AppTextField
+            v-model="form.age"
+            hide-bottom-space
+            :class="$style.control"
+            type="number"
+            min="0"
+            max="50"
+            placeholder="Возраст (лет)"
+            :error="Boolean(errors.age)"
+            :error-message="errors.age"
           />
-          <AppButton
-            color="primary"
-            unelevated
-            no-caps
-            label="Добавить"
-            type="submit"
-            :loading="submitting"
-            :disable="submitting"
+        </AppFormField>
+
+        <AppFormField label="Пол">
+          <AppSelectField
+            v-model="form.gender"
+            hide-bottom-space
+            :class="$style.control"
+            :options="genderOptions"
+            placeholder="Выберите пол"
+            :error="Boolean(errors.gender)"
+            :error-message="errors.gender"
           />
-        </div>
-      </q-form>
-    </q-card>
-  </q-dialog>
+        </AppFormField>
+      </div>
+
+      <div :class="$style.fieldsRow">
+        <AppFormField label="Статус">
+          <AppSelectField
+            v-model="form.status"
+            hide-bottom-space
+            :class="$style.control"
+            :options="statusOptions"
+            placeholder="Выберите статус"
+            :error="Boolean(errors.status)"
+            :error-message="errors.status"
+          />
+        </AppFormField>
+
+        <AppFormField label="Куратор">
+          <AppSelectField
+            v-model="form.curatorId"
+            hide-bottom-space
+            :class="$style.control"
+            :options="filteredCuratorOptions"
+            placeholder="Выберите куратора"
+            clearable
+            use-input
+            fill-input
+            hide-selected
+            input-debounce="0"
+            @filter="filterCurators"
+          />
+        </AppFormField>
+      </div>
+
+      <div :class="$style.fieldsRow">
+        <AppFormField label="Масть">
+          <AppTextField
+            v-model="form.color"
+            hide-bottom-space
+            :class="$style.control"
+            placeholder="Введите масть"
+            :error="Boolean(errors.color)"
+            :error-message="errors.color"
+          />
+        </AppFormField>
+
+        <AppFormField label="Фото">
+          <AppFileField
+            v-model="form.photo"
+            hide-bottom-space
+            :class="$style.control"
+            accept="image/*"
+            clearable
+            label="Выберите изображение"
+            :error="Boolean(errors.photo)"
+            :error-message="errors.photo"
+          />
+        </AppFormField>
+      </div>
+
+      <AppFormField label="Описание">
+        <AppTextField
+          v-model="form.description"
+          hide-bottom-space
+          :class="[$style.control, $style.controlTextarea]"
+          type="textarea"
+          autogrow
+          placeholder="Краткое описание"
+          :error="Boolean(errors.description)"
+          :error-message="errors.description"
+        />
+      </AppFormField>
+
+      <AppFormField label="История">
+        <AppTextField
+          v-model="form.history"
+          hide-bottom-space
+          :class="[$style.control, $style.controlTextarea]"
+          type="textarea"
+          autogrow
+          placeholder="История лошади"
+          :error="Boolean(errors.history)"
+          :error-message="errors.history"
+        />
+      </AppFormField>
+
+      <AppFormActions>
+        <AppButton
+          outline
+          no-caps
+          label="Отмена"
+          type="button"
+          :class="$style.secondaryButton"
+          :disable="submitting"
+          @click="closeDialog"
+        />
+        <AppButton
+          color="primary"
+          unelevated
+          no-caps
+          label="Добавить"
+          type="submit"
+          :class="$style.primaryButton"
+          :loading="submitting"
+          :disable="submitting"
+        />
+      </AppFormActions>
+    </q-form>
+  </AppFormDialog>
 </template>
 
 <script setup>
 import { ref, watch } from 'vue'
+import AppFormActions from 'src/components/blocks/AppFormActions/AppFormActions.vue'
+import AppFormDialog from 'src/components/blocks/AppFormDialog/AppFormDialog.vue'
 import AppButton from 'src/components/ui/AppButton/AppButton.vue'
 import AppFileField from 'src/components/ui/AppFileField/AppFileField.vue'
+import AppFormField from 'src/components/ui/AppFormField/AppFormField.vue'
 import AppSelectField from 'src/components/ui/AppSelectField/AppSelectField.vue'
 import AppTextField from 'src/components/ui/AppTextField/AppTextField.vue'
 

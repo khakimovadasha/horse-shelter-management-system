@@ -43,6 +43,7 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useCurrentUserStore } from 'src/stores/currentUser'
 import AuthCard from 'src/components/blocks/AuthCard/AuthCard.vue'
 import AuthForm from 'src/components/blocks/AuthForm/AuthForm.vue'
 import AuthFooter from 'src/components/blocks/AuthFooter/AuthFooter.vue'
@@ -51,6 +52,7 @@ import AuthSubmitButton from 'src/components/ui/AuthSubmitButton/AuthSubmitButto
 import { loginUser, setAccessToken } from 'src/api/auth'
 
 const router = useRouter()
+const currentUserStore = useCurrentUserStore()
 
 const isSubmitting = ref(false)
 const errorMessage = ref('')
@@ -71,6 +73,8 @@ const handleSubmit = async () => {
     })
 
     setAccessToken(data.access_token)
+    currentUserStore.clearCurrentUser()
+    await currentUserStore.fetchCurrentUser(true)
     await router.push('/app')
   } catch (error) {
     errorMessage.value =

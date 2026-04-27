@@ -1,0 +1,37 @@
+.root {
+  :deep(.q-field__control) {
+    min-height: 56px;
+    border-radius: 16px;
+    background: #fff;
+    color: #233044;
+  }
+
+  :deep(.q-field__native),
+  :deep(.q-field__input),
+  :deep(.q-field__marginal) {
+    color: #233044;
+    font-size: 1rem;
+  }
+
+  :deep(.q-field__native span),
+  :deep(.q-field__input::placeholder) {
+    color: #8a94a6;
+  }
+
+  :deep(.q-field__control:before) {
+    border: 1px solid #dbe2eb;
+  }
+
+  :deep(.q-field__control:hover:before) {
+    border-color: #c8d2df;
+  }
+
+  :deep(.q-field--focused .q-field__control:before),
+  :deep(.q-field--focused .q-field__control:after) {
+    border-color: #2f6f3e;
+  }
+
+  :deep(.q-field__bottom) {
+    padding: 6px 8px 0;
+  }
+}

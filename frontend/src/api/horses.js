@@ -13,6 +13,19 @@ export const getHorseById = async (horseId) => {
   return response.data
 }
 
+export const createHorse = async (payload) => {
+  const token = getAccessToken()
+
+  const response = await api.post('/horses/', payload, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+
+  return response.data
+}
+
 export const getHorseMedicalRecords = async (horseId) => {
   const token = getAccessToken()
 

@@ -1,5 +1,5 @@
 <template>
-  <q-input
+  <q-file
     v-bind="$attrs"
     :class="$style.root"
     outlined
@@ -14,7 +14,7 @@
     >
       <slot :name="slotName" v-bind="slotProps || {}" />
     </template>
-  </q-input>
+  </q-file>
 </template>
 
 <script setup>
@@ -24,12 +24,12 @@ defineOptions({
 
 defineProps({
   modelValue: {
-    type: [String, Number, null],
-    default: '',
+    type: [Object, Array, null],
+    default: null,
   },
 })
 
 defineEmits(['update:modelValue'])
 </script>
 
-<style module lang="scss" src="./AppTextField.module.scss"></style>
+<style module lang="scss" src="./AppFileField.module.scss"></style>

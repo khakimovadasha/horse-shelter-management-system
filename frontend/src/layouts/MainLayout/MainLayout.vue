@@ -152,10 +152,12 @@ import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { removeAccessToken } from 'src/api/auth'
+import { useCurrentUserStore } from 'src/stores/currentUser'
 
 const route = useRoute()
 const router = useRouter()
 const $q = useQuasar()
+const currentUserStore = useCurrentUserStore()
 
 const leftDrawerOpen = ref(false)
 
@@ -186,6 +188,7 @@ const closeDrawer = () => {
 
 const handleLogout = async () => {
   removeAccessToken()
+  currentUserStore.clearCurrentUser()
   leftDrawerOpen.value = false
   await router.push('/login')
 }

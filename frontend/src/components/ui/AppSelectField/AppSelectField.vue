@@ -1,6 +1,7 @@
 <template>
   <q-select
     v-bind="$attrs"
+    :class="$style.root"
     outlined
     dense
     emit-value

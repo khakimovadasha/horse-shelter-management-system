@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
-import { getHorses } from 'src/api/horses'
+import { getUsers } from 'src/api/users'
 
-export const useHorsesStore = defineStore('horses', {
+export const useUsersStore = defineStore('users', {
   state: () => ({
     items: [],
     loading: false,
@@ -10,7 +10,7 @@ export const useHorsesStore = defineStore('horses', {
   }),
 
   actions: {
-    async fetchHorses(force = false) {
+    async fetchUsers(force = false) {
       if (this.loading) {
         return
       }
@@ -23,19 +23,14 @@ export const useHorsesStore = defineStore('horses', {
       this.error = ''
 
       try {
-        this.items = await getHorses()
+        this.items = await getUsers()
         this.loaded = true
       } catch (err) {
-        this.error = err.message || 'Не удалось загрузить список лошадей'
+        this.error = err.response?.data?.detail || err.message || 'Не удалось загрузить пользователей'
         throw err
       } finally {
         this.loading = false
       }
-    },
-
-    prependHorse(horse) {
-      this.items = [horse, ...this.items.filter((item) => item.id !== horse.id)]
-      this.loaded = true
     },
   },
 })

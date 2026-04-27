@@ -7,16 +7,10 @@
   }
 
   :deep(.q-field__native),
-  :deep(.q-field__input) {
+  :deep(.q-field__input),
+  :deep(.q-field__marginal) {
     color: #233044;
     font-size: 1rem;
-    line-height: 1.5;
-  }
-
-  :deep(.q-field__native::placeholder),
-  :deep(.q-field__input::placeholder) {
-    color: #8a94a6;
-    opacity: 1;
   }
 
   :deep(.q-field__control:before) {
@@ -30,12 +24,6 @@
   :deep(.q-field--focused .q-field__control:before),
   :deep(.q-field--focused .q-field__control:after) {
     border-color: #2f6f3e;
-  }
-
-  :deep(.q-field--textarea .q-field__control) {
-    min-height: 132px;
-    padding-top: 8px;
-    padding-bottom: 8px;
   }
 
   :deep(.q-field__bottom) {

@@ -33,5 +33,11 @@ export const useHorseDetailsStore = defineStore('horseDetails', {
         this.loadingById[id] = false
       }
     },
+
+    updateHorse(horse) {
+      const id = String(horse.id)
+      this.items[id] = horse
+      this.errorById[id] = ''
+    },
   },
 })

@@ -37,5 +37,10 @@ export const useHorsesStore = defineStore('horses', {
       this.items = [horse, ...this.items.filter((item) => item.id !== horse.id)]
       this.loaded = true
     },
+
+    updateHorse(horse) {
+      this.items = this.items.map((item) => (item.id === horse.id ? horse : item))
+      this.loaded = true
+    },
   },
 })

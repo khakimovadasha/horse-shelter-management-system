@@ -19,12 +19,14 @@
             </div>
 
             <AppButton
+              v-if="canEdit"
               outline
               no-caps
               icon="edit"
               label=""
               dense
               :class="[$style.editButton, $style.editButtonMobile]"
+              @click="$emit('edit')"
             />
           </div>
 
@@ -68,11 +70,13 @@
       </div>
 
       <AppButton
+        v-if="canEdit"
         outline
         no-caps
         icon="edit"
         label=""
         :class="[$style.editButton, $style.editButtonDesktop]"
+        @click="$emit('edit')"
       />
     </div>
 
@@ -103,7 +107,13 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  canEdit: {
+    type: Boolean,
+    default: false,
+  },
 })
+
+defineEmits(['edit'])
 
 const imageSrc = computed(() => getHorseImageSrc(props.horse.photo_url))
 const statusLabel = computed(() => getHorseStatusLabel(props.horse.status))

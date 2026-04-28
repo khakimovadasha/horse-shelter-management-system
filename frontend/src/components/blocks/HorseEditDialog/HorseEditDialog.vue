@@ -1,17 +1,18 @@
 <template>
   <AppFormDialog
     :model-value="modelValue"
-    title="Добавить лошадь"
-    subtitle="Заполните информацию о новой лошади"
+    title="Редактировать лошадь"
+    subtitle="Измените информацию о лошади"
     @update:model-value="$emit('update:modelValue', $event)"
   >
     <HorseForm
       :is-open="modelValue"
+      :horse="horse"
       :curator-options="curatorOptions"
       :submitting="submitting"
-      submit-label="Добавить"
-      photo-label="Выберите изображение"
-      require-photo
+      submit-label="Сохранить"
+      photo-label="Выберите новое изображение"
+      show-arrival-date
       @cancel="$emit('update:modelValue', false)"
       @submit="$emit('submit', $event)"
     />
@@ -26,6 +27,10 @@ defineProps({
   modelValue: {
     type: Boolean,
     default: false,
+  },
+  horse: {
+    type: Object,
+    default: null,
   },
   curatorOptions: {
     type: Array,

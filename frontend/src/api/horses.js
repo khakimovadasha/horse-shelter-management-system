@@ -26,6 +26,19 @@ export const createHorse = async (payload) => {
   return response.data
 }
 
+export const updateHorse = async (horseId, payload) => {
+  const token = getAccessToken()
+
+  const response = await api.patch(`/horses/${horseId}`, payload, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+
+  return response.data
+}
+
 export const getHorseMedicalRecords = async (horseId) => {
   const token = getAccessToken()
 

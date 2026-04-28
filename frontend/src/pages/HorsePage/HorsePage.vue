@@ -46,6 +46,7 @@ import { useHorseDetailsStore } from 'src/stores/horseDetails'
 import { useCurrentUserStore } from 'src/stores/currentUser'
 import { useHorsesStore } from 'src/stores/horses'
 import { useUsersStore } from 'src/stores/users'
+import { canEditHorse as canEditHorsePermission } from 'src/utils/permissions'
 
 import HorseEditDialog from 'src/components/blocks/HorseEditDialog/HorseEditDialog.vue'
 import HorseProfileHeader from 'src/components/blocks/HorseProfileHeader/HorseProfileHeader.vue'
@@ -69,10 +70,7 @@ const error = computed(() => horseDetailsStore.errorById[horseId.value] || '')
 const isEditDialogOpen = ref(false)
 const isUpdatingHorse = ref(false)
 
-const canEditHorse = computed(() => {
-  const role = currentUser.value?.role
-  return role === 'admin' || role === 'veterinarian'
-})
+const canEditHorse = computed(() => canEditHorsePermission(currentUser.value))
 
 const curatorOptions = computed(() => {
   const activeUsers = [...users.value]

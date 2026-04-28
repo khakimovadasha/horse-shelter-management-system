@@ -86,6 +86,7 @@ import AppButton from 'src/components/ui/AppButton/AppButton.vue'
 import { useCurrentUserStore } from 'src/stores/currentUser'
 import { useHorsesStore } from 'src/stores/horses'
 import { useUsersStore } from 'src/stores/users'
+import { canCreateHorse } from 'src/utils/permissions'
 
 const $q = useQuasar()
 
@@ -113,7 +114,7 @@ const statusOrder = {
   deceased: 4,
 }
 
-const isAdmin = computed(() => currentUser.value?.role === 'admin')
+const isAdmin = computed(() => canCreateHorse(currentUser.value))
 
 const curatorOptions = computed(() => {
   const activeUsers = [...users.value]

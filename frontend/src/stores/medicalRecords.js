@@ -33,5 +33,15 @@ export const useMedicalRecordsStore = defineStore('medicalRecords', {
         this.loadingByHorseId[id] = false
       }
     },
+
+    prependMedicalRecord(horseId, record) {
+      const id = String(horseId)
+      const existingRecords = this.itemsByHorseId[id] || []
+      this.itemsByHorseId[id] = [
+        record,
+        ...existingRecords.filter((item) => item.id !== record.id),
+      ]
+      this.errorByHorseId[id] = ''
+    },
   },
 })

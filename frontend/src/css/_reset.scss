@@ -1,20 +1,25 @@
 html,
-body,
 #q-app {
   height: 100%;
 }
 
 html {
   font-size: 16px;
-  overflow-y: scroll;
+  scrollbar-gutter: stable;
 }
 
 body {
+  min-height: 100%;
   margin: 0;
   background: var(--app-bg);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body.q-body--prevent-scroll {
+  width: 100%;
+  overflow-x: hidden !important;
 }
 
 *,

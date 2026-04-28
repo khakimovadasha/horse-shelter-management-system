@@ -7,3 +7,7 @@ export const canCreateHorse = (user) => isAdmin(user)
 export const canEditHorse = (user) => {
   return isAdmin(user) || isVeterinarian(user)
 }
+
+export const canCreateMedicalRecord = (user) => {
+  return isAdmin(user) || isVeterinarian(user)
+}

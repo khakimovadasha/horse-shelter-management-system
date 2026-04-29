@@ -1,0 +1,45 @@
+.root {
+  padding: 28px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.subtitle {
+  margin-top: 6px;
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.actions {
+  flex-shrink: 0;
+}
+
+.body {
+  margin-top: 28px;
+}
+
+@media (max-width: 768px) {
+  .root {
+    padding: 20px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .body {
+    margin-top: 22px;
+  }
+}

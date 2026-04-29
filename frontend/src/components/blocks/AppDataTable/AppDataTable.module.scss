@@ -1,0 +1,67 @@
+.wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: #fff;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 760px;
+}
+
+.headCell {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: #fff;
+}
+
+.cell {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  font-size: 1rem;
+  color: var(--text-primary);
+  vertical-align: middle;
+  background: transparent;
+}
+
+.row:last-child .cell {
+  border-bottom: 0;
+}
+
+.alignCenter {
+  text-align: center;
+}
+
+.alignRight {
+  text-align: right;
+}
+
+.empty {
+  padding: 28px 20px;
+  text-align: center;
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.rowSubtle .cell {
+  background: rgba(244, 246, 243, 0.7);
+}
+
+.rowSuccess .cell {
+  background: rgba(46, 125, 50, 0.06);
+}
+
+.rowWarning .cell {
+  background: rgba(239, 108, 0, 0.08);
+}
+
+.rowDanger .cell {
+  background: rgba(198, 40, 40, 0.08);
+}

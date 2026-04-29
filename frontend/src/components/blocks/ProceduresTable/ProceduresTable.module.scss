@@ -1,0 +1,26 @@
+.horseName,
+.procedureType,
+.date {
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.horseName {
+  font-weight: 700;
+}
+
+.dateTime {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.time {
+  font-size: 0.98rem;
+  color: var(--text-secondary);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}

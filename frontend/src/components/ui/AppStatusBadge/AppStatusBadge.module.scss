@@ -34,3 +34,21 @@
   background: rgba(96, 125, 139, 0.12);
   color: #546e7a;
 }
+
+.planned {
+  background: rgba(41, 98, 255, 0.1);
+  color: #2962ff;
+  border: 1px solid rgba(41, 98, 255, 0.24);
+}
+
+.completed {
+  background: rgba(0, 150, 136, 0.12);
+  color: #009688;
+  border: 1px solid rgba(0, 150, 136, 0.24);
+}
+
+.overdue {
+  background: rgba(244, 67, 54, 0.1);
+  color: #f44336;
+  border: 1px solid rgba(244, 67, 54, 0.22);
+}

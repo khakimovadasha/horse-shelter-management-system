@@ -1,8 +1,16 @@
 .root {
+  :global(.q-field--with-bottom) {
+    padding-bottom: 0;
+  }
+
   :global(.q-field__control) {
     height: 54px;
     border-radius: 16px;
     background: #fff;
     align-items: center;
+  }
+
+  :global(.q-field__bottom) {
+    display: none;
   }
 }

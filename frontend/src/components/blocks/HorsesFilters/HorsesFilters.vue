@@ -1,36 +1,42 @@
 <template>
-  <q-card :class="[$style.root, 'app-card']">
-    <div :class="$style.grid">
-      <AppTextField
-        clearable
-        placeholder="Поиск по кличке..."
-        :class="$style.field"
-        :model-value="search"
-        @update:model-value="$emit('update:search', $event)"
-      >
-        <template #prepend>
-          <q-icon name="search" />
-        </template>
-      </AppTextField>
+  <AppFiltersPanel>
+    <AppFiltersGrid desktop-columns="1.3fr 1fr 1fr">
+      <AppFilterField>
+        <AppTextField
+          clearable
+          placeholder="Поиск по кличке..."
+          :model-value="search"
+          @update:model-value="$emit('update:search', $event)"
+        >
+          <template #prepend>
+            <q-icon name="search" />
+          </template>
+        </AppTextField>
+      </AppFilterField>
 
-      <AppSelectField
-        :class="$style.field"
-        :model-value="status"
-        :options="statusOptions"
-        @update:model-value="$emit('update:status', $event)"
-      />
+      <AppFilterField>
+        <AppSelectField
+          :model-value="status"
+          :options="statusOptions"
+          @update:model-value="$emit('update:status', $event)"
+        />
+      </AppFilterField>
 
-      <AppSelectField
-        :class="$style.field"
-        :model-value="sort"
-        :options="sortOptions"
-        @update:model-value="$emit('update:sort', $event)"
-      />
-    </div>
-  </q-card>
+      <AppFilterField>
+        <AppSelectField
+          :model-value="sort"
+          :options="sortOptions"
+          @update:model-value="$emit('update:sort', $event)"
+        />
+      </AppFilterField>
+    </AppFiltersGrid>
+  </AppFiltersPanel>
 </template>
 
 <script setup>
+import AppFiltersGrid from 'src/components/blocks/AppFiltersGrid/AppFiltersGrid.vue'
+import AppFiltersPanel from 'src/components/blocks/AppFiltersPanel/AppFiltersPanel.vue'
+import AppFilterField from 'src/components/ui/AppFilterField/AppFilterField.vue'
 import AppSelectField from 'src/components/ui/AppSelectField/AppSelectField.vue'
 import AppTextField from 'src/components/ui/AppTextField/AppTextField.vue'
 
@@ -64,5 +70,3 @@ const sortOptions = [
   { label: 'По статусу', value: 'status' },
 ]
 </script>
-
-<style module lang="scss" src="./HorsesFilters.module.scss"></style>

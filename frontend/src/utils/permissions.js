@@ -11,3 +11,7 @@ export const canEditHorse = (user) => {
 export const canCreateMedicalRecord = (user) => {
   return isAdmin(user) || isVeterinarian(user)
 }
+
+export const canCompleteProcedure = (user) => {
+  return isAdmin(user) || isVeterinarian(user)
+}

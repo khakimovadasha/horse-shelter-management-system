@@ -1,14 +1,23 @@
 import { api } from 'src/boot/axios'
 import { getAccessToken } from 'src/api/auth'
 
-export const getProcedures = async () => {
-  const token = getAccessToken()
+const withAuth = () => ({
+  headers: {
+    Authorization: `Bearer ${getAccessToken()}`,
+  },
+})
 
-  const response = await api.get('/procedures', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
+export const getProcedures = async () => {
+  const response = await api.get('/procedures', withAuth())
+  return response.data
+}
+
+export const completeProcedure = async (horseId, procedureId, payload = {}) => {
+  const response = await api.post(
+    `/horses/${horseId}/procedures/${procedureId}/complete`,
+    payload,
+    withAuth()
+  )
 
   return response.data
 }

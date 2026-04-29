@@ -24,17 +24,20 @@
     />
 
     <div class="q-mt-xl">
-      <div v-if="loading" :class="$style.state">
+      <div v-if="proceduresLoading" :class="$style.state">
         Загрузка...
       </div>
 
-      <div v-else-if="error" :class="[$style.state, $style.stateError]">
-        Ошибка загрузки: {{ error }}
+      <div v-else-if="proceduresError" :class="[$style.state, $style.stateError]">
+        Ошибка загрузки: {{ proceduresError }}
       </div>
 
       <ProceduresTable
         v-else
         :rows="filteredProcedures"
+        :can-complete="canComplete"
+        :completing-ids="completingIds"
+        @complete="handleCompleteProcedure"
       />
     </div>
   </q-page>
@@ -43,22 +46,36 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { getProcedures } from 'src/api/procedures'
+import { useQuasar } from 'quasar'
+import { completeProcedure } from 'src/api/procedures'
 import ProceduresFilters from 'src/components/blocks/ProceduresFilters/ProceduresFilters.vue'
 import ProceduresTable from 'src/components/blocks/ProceduresTable/ProceduresTable.vue'
 import AppButton from 'src/components/ui/AppButton/AppButton.vue'
+import { useCurrentUserStore } from 'src/stores/currentUser'
 import { useHorsesStore } from 'src/stores/horses'
+import { useProceduresStore } from 'src/stores/procedures'
+import { canCompleteProcedure } from 'src/utils/permissions'
+
+const $q = useQuasar()
 
 const searchQuery = ref('')
 const selectedStatus = ref('all')
 const selectedHorseId = ref('all')
-const procedures = ref([])
-const loading = ref(false)
-const error = ref('')
+const completingIds = ref([])
 
 const horsesStore = useHorsesStore()
-const { items: horses } = storeToRefs(horsesStore)
+const currentUserStore = useCurrentUserStore()
+const proceduresStore = useProceduresStore()
 
+const { items: horses } = storeToRefs(horsesStore)
+const { user: currentUser } = storeToRefs(currentUserStore)
+const {
+  items: procedures,
+  loading: proceduresLoading,
+  error: proceduresError,
+} = storeToRefs(proceduresStore)
+
+const canComplete = computed(() => canCompleteProcedure(currentUser.value))
 const now = () => Date.now()
 
 const getHorseName = (horseId) => {
@@ -94,9 +111,9 @@ const mapProcedure = (procedure) => {
 
 const horseOptions = computed(() => {
   const items = horses.value
-    .map((procedure) => ({
-      label: procedure.name,
-      value: procedure.id,
+    .map((horse) => ({
+      label: horse.name,
+      value: horse.id,
     }))
     .sort((a, b) => a.label.localeCompare(b.label, 'ru'))
 
@@ -127,20 +144,40 @@ const filteredProcedures = computed(() => {
 })
 
 const loadProceduresPage = async () => {
-  loading.value = true
-  error.value = ''
+  try {
+    await Promise.all([
+      proceduresStore.fetchProcedures(),
+      horsesStore.fetchHorses().catch(() => {}),
+      currentUserStore.fetchCurrentUser().catch(() => {}),
+    ])
+  } catch {
+    // Процедуры и так положат текст ошибки в store.
+  }
+}
+
+const handleCompleteProcedure = async (row) => {
+  if (!canComplete.value || completingIds.value.includes(row.id)) {
+    return
+  }
+
+  completingIds.value = [...completingIds.value, row.id]
 
   try {
-    const [proceduresData] = await Promise.all([
-      getProcedures(),
-      horsesStore.fetchHorses().catch(() => {}),
-    ])
+    const updatedProcedure = await completeProcedure(row.horseId, row.id)
 
-    procedures.value = proceduresData
+    proceduresStore.updateProcedure(updatedProcedure)
+
+    $q.notify({
+      type: 'positive',
+      message: 'Процедура отмечена как выполненная',
+    })
   } catch (err) {
-    error.value = err.response?.data?.detail || err.message || 'Не удалось загрузить процедуры'
+    $q.notify({
+      type: 'negative',
+      message: err.response?.data?.detail || 'Не удалось отметить процедуру как выполненную',
+    })
   } finally {
-    loading.value = false
+    completingIds.value = completingIds.value.filter((id) => id !== row.id)
   }
 }
 

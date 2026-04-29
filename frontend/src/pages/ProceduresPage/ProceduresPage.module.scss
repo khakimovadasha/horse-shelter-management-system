@@ -24,6 +24,10 @@
   color: var(--red);
 }
 
+.pagination {
+  margin-top: 32px;
+}
+
 @media (max-width: 768px) {
   .header {
     flex-direction: column;

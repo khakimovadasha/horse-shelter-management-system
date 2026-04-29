@@ -52,14 +52,9 @@
         </div>
 
         <div v-if="totalPages > 1" :class="$style.pagination">
-          <q-pagination
+          <AppPagination
             v-model="currentPage"
             :max="totalPages"
-            :max-pages="6"
-            direction-links
-            boundary-links
-            color="primary"
-            active-design="unelevated"
           />
         </div>
       </template>
@@ -83,6 +78,7 @@ import HorseCreateDialog from 'src/components/blocks/HorseCreateDialog/HorseCrea
 import HorseCard from 'src/components/blocks/HorseCard/HorseCard.vue'
 import HorsesFilters from 'src/components/blocks/HorsesFilters/HorsesFilters.vue'
 import AppButton from 'src/components/ui/AppButton/AppButton.vue'
+import AppPagination from 'src/components/ui/AppPagination/AppPagination.vue'
 import { useCurrentUserStore } from 'src/stores/currentUser'
 import { useHorsesStore } from 'src/stores/horses'
 import { useUsersStore } from 'src/stores/users'

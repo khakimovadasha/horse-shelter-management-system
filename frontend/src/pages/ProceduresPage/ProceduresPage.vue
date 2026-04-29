@@ -32,25 +32,34 @@
         Ошибка загрузки: {{ proceduresError }}
       </div>
 
-      <ProceduresTable
-        v-else
-        :rows="filteredProcedures"
-        :can-complete="canComplete"
-        :completing-ids="completingIds"
-        @complete="handleCompleteProcedure"
-      />
+      <template v-else>
+        <ProceduresTable
+          :rows="paginatedProcedures"
+          :can-complete="canComplete"
+          :completing-ids="completingIds"
+          @complete="handleCompleteProcedure"
+        />
+
+        <div v-if="totalPages > 1" :class="$style.pagination">
+          <AppPagination
+            v-model="currentPage"
+            :max="totalPages"
+          />
+        </div>
+      </template>
     </div>
   </q-page>
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import { completeProcedure } from 'src/api/procedures'
 import ProceduresFilters from 'src/components/blocks/ProceduresFilters/ProceduresFilters.vue'
 import ProceduresTable from 'src/components/blocks/ProceduresTable/ProceduresTable.vue'
 import AppButton from 'src/components/ui/AppButton/AppButton.vue'
+import AppPagination from 'src/components/ui/AppPagination/AppPagination.vue'
 import { useCurrentUserStore } from 'src/stores/currentUser'
 import { useHorsesStore } from 'src/stores/horses'
 import { useProceduresStore } from 'src/stores/procedures'
@@ -58,9 +67,12 @@ import { canCompleteProcedure } from 'src/utils/permissions'
 
 const $q = useQuasar()
 
+const PAGE_SIZE = 8
+
 const searchQuery = ref('')
 const selectedStatus = ref('all')
 const selectedHorseId = ref('all')
+const currentPage = ref(1)
 const completingIds = ref([])
 
 const horsesStore = useHorsesStore()
@@ -143,6 +155,16 @@ const filteredProcedures = computed(() => {
   })
 })
 
+const totalPages = computed(() => {
+  return Math.max(1, Math.ceil(filteredProcedures.value.length / PAGE_SIZE))
+})
+
+const paginatedProcedures = computed(() => {
+  const startIndex = (currentPage.value - 1) * PAGE_SIZE
+  const endIndex = startIndex + PAGE_SIZE
+  return filteredProcedures.value.slice(startIndex, endIndex)
+})
+
 const loadProceduresPage = async () => {
   try {
     await Promise.all([
@@ -180,6 +202,16 @@ const handleCompleteProcedure = async (row) => {
     completingIds.value = completingIds.value.filter((id) => id !== row.id)
   }
 }
+
+watch([searchQuery, selectedStatus, selectedHorseId], () => {
+  currentPage.value = 1
+})
+
+watch(totalPages, (pages) => {
+  if (currentPage.value > pages) {
+    currentPage.value = pages
+  }
+})
 
 onMounted(loadProceduresPage)
 </script>

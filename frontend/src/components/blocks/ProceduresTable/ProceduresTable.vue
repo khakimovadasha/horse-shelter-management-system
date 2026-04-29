@@ -31,11 +31,26 @@
         />
       </template>
 
+      <template #cell-addToMedicalRecord="{ row }">
+        <div :class="$style.medicalRecordFlag">
+          <q-icon
+            v-if="row.addToMedicalRecord"
+            name="done"
+            :class="[$style.flagIcon, $style.flagIconPositive]"
+          />
+          <q-icon
+            v-else
+            name="close"
+            :class="[$style.flagIcon, $style.flagIconNegative]"
+          />
+        </div>
+      </template>
+
       <template #cell-actions="{ row }">
         <div :class="$style.actions">
           <AppTableAction
             v-if="row.status !== 'completed'"
-            label="Выполнено"
+            label="Выполнить"
           />
         </div>
       </template>
@@ -61,6 +76,7 @@ const columns = [
   { key: 'procedureType', label: 'Тип процедуры' },
   { key: 'scheduledAt', label: 'Дата и время' },
   { key: 'status', label: 'Статус' },
+  { key: 'addToMedicalRecord', label: 'В медкарту', align: 'center' },
   { key: 'actions', label: 'Действия', align: 'right' },
 ]
 

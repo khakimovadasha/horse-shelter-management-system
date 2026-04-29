@@ -24,3 +24,21 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.medicalRecordFlag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flagIcon {
+  font-size: 20px;
+}
+
+.flagIconPositive {
+  color: var(--green);
+}
+
+.flagIconNegative {
+  color: #c62828;
+}

@@ -15,6 +15,15 @@
   font-weight: 700;
 }
 
+.state {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.stateError {
+  color: var(--red);
+}
+
 @media (max-width: 768px) {
   .header {
     flex-direction: column;

@@ -1,0 +1,36 @@
+.root {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: min(420px, calc(100vw - 32px));
+  max-width: min(460px, calc(100vw - 32px));
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 12px 32px rgba(31, 42, 55, 0.14);
+}
+
+.icon {
+  flex: 0 0 auto;
+  color: #2d2d2d;
+}
+
+.message {
+  font-size: 16px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+@media (max-width: 640px) {
+  .root {
+    min-width: 0;
+    max-width: calc(100vw - 24px);
+    padding: 16px 18px;
+    border-radius: 14px;
+  }
+
+  .message {
+    font-size: 15px;
+  }
+}

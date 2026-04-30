@@ -74,6 +74,7 @@ import { useCurrentUserStore } from 'src/stores/currentUser'
 import { useHorsesStore } from 'src/stores/horses'
 import { useMedicalRecordsStore } from 'src/stores/medicalRecords'
 import { useProceduresStore } from 'src/stores/procedures'
+import { notifySuccess } from 'src/utils/notifySuccess'
 import { canCompleteProcedure, canCreateProcedure } from 'src/utils/permissions'
 
 const PAGE_SIZE = 8
@@ -173,9 +174,7 @@ const filteredProcedures = computed(() => {
     )
   }
 
-  return result.sort((a, b) => {
-    return new Date(b.scheduledAt).getTime() - new Date(a.scheduledAt).getTime()
-  })
+  return result.sort((a, b) => new Date(b.scheduledAt).getTime() - new Date(a.scheduledAt).getTime())
 })
 
 const totalPages = computed(() => {
@@ -219,10 +218,7 @@ const handleCreateProcedure = async (payload) => {
     isCreateDialogOpen.value = false
     currentPage.value = 1
 
-    Notify.create({
-      type: 'positive',
-      message: 'Процедура добавлена',
-    })
+    notifySuccess('Медицинская процедура успешно добавлена')
   } catch (err) {
     Notify.create({
       type: 'negative',
@@ -254,10 +250,7 @@ const handleCompleteProcedure = async (row) => {
       await medicalRecordsStore.fetchHorseMedicalRecords(updatedProcedure.horse_id, true)
     }
 
-    Notify.create({
-      type: 'positive',
-      message: 'Процедура отмечена как выполненная',
-    })
+    notifySuccess('Медицинская процедура успешно выполнена')
   } catch (err) {
     Notify.create({
       type: 'negative',

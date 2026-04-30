@@ -69,12 +69,13 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useQuasar } from 'quasar'
+import { Notify } from 'quasar'
 import { createHorseMedicalRecord } from 'src/api/horses'
 import MedicalRecordCreateDialog from 'src/components/blocks/MedicalRecordCreateDialog/MedicalRecordCreateDialog.vue'
 import AppButton from 'src/components/ui/AppButton/AppButton.vue'
 import { useCurrentUserStore } from 'src/stores/currentUser'
 import { useMedicalRecordsStore } from 'src/stores/medicalRecords'
+import { notifySuccess } from 'src/utils/notifySuccess'
 import { canCreateMedicalRecord } from 'src/utils/permissions'
 
 const props = defineProps({
@@ -84,7 +85,6 @@ const props = defineProps({
   },
 })
 
-const $q = useQuasar()
 const medicalRecordsStore = useMedicalRecordsStore()
 const currentUserStore = useCurrentUserStore()
 
@@ -144,12 +144,9 @@ const handleCreateRecord = async (payload) => {
     medicalRecordsStore.prependMedicalRecord(props.horseId, createdRecord)
     isCreateDialogOpen.value = false
 
-    $q.notify({
-      type: 'positive',
-      message: 'Медицинская запись добавлена',
-    })
+    notifySuccess('Медицинская запись успешно добавлена')
   } catch (err) {
-    $q.notify({
+    Notify.create({
       type: 'negative',
       message:
         err.response?.data?.detail || err.message || 'Не удалось добавить медицинскую запись',

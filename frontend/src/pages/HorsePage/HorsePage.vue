@@ -39,21 +39,20 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useQuasar } from 'quasar'
+import { Notify } from 'quasar'
 import { useRoute } from 'vue-router'
 import { updateHorse } from 'src/api/horses'
-import { useHorseDetailsStore } from 'src/stores/horseDetails'
-import { useCurrentUserStore } from 'src/stores/currentUser'
-import { useHorsesStore } from 'src/stores/horses'
-import { useUsersStore } from 'src/stores/users'
-import { canEditHorse as canEditHorsePermission } from 'src/utils/permissions'
-
 import HorseEditDialog from 'src/components/blocks/HorseEditDialog/HorseEditDialog.vue'
 import HorseProfileHeader from 'src/components/blocks/HorseProfileHeader/HorseProfileHeader.vue'
 import HorseDetailTabs from 'src/components/blocks/HorseDetailTabs/HorseDetailTabs.vue'
 import HorseMedicalCardPanel from 'src/components/blocks/HorseMedicalCardPanel/HorseMedicalCardPanel.vue'
+import { useCurrentUserStore } from 'src/stores/currentUser'
+import { useHorseDetailsStore } from 'src/stores/horseDetails'
+import { useHorsesStore } from 'src/stores/horses'
+import { useUsersStore } from 'src/stores/users'
+import { notifySuccess } from 'src/utils/notifySuccess'
+import { canEditHorse as canEditHorsePermission } from 'src/utils/permissions'
 
-const $q = useQuasar()
 const route = useRoute()
 const horseDetailsStore = useHorseDetailsStore()
 const currentUserStore = useCurrentUserStore()
@@ -97,7 +96,7 @@ const openEditDialog = async () => {
   }
 
   await usersStore.fetchUsers().catch(() => {
-    $q.notify({
+    Notify.create({
       type: 'negative',
       message: usersStore.error || 'Не удалось загрузить список кураторов',
     })
@@ -133,12 +132,9 @@ const handleUpdateHorse = async (payload) => {
     horsesStore.updateHorse(updatedHorse)
     isEditDialogOpen.value = false
 
-    $q.notify({
-      type: 'positive',
-      message: 'Карточка лошади обновлена',
-    })
+    notifySuccess('Карточка лошади успешно обновлена')
   } catch (err) {
-    $q.notify({
+    Notify.create({
       type: 'negative',
       message:
         err.response?.data?.detail || err.message || 'Не удалось обновить карточку лошади',

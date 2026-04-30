@@ -22,3 +22,32 @@
 .text-muted {
   color: var(--text-muted);
 }
+
+.q-notification.app-success-notify {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  max-width: min(420px, calc(100vw - 24px));
+  padding: 14px 18px;
+  background: #fff;
+  color: #1f2a37;
+  border: 1px solid rgba(215, 223, 232, 0.9);
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(31, 42, 55, 0.14);
+}
+
+.q-notification.app-success-notify .q-notification__message {
+  display: block;
+  flex: 1 1 auto;
+  font-size: 16px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: #1f2a37;
+  opacity: 1;
+  white-space: nowrap;
+}
+
+.q-notification.app-success-notify .q-icon {
+  font-size: 24px;
+  color: #2d2d2d;
+}

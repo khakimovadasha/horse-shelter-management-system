@@ -72,7 +72,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useQuasar } from 'quasar'
+import { Notify } from 'quasar'
 import { createHorse } from 'src/api/horses'
 import HorseCreateDialog from 'src/components/blocks/HorseCreateDialog/HorseCreateDialog.vue'
 import HorseCard from 'src/components/blocks/HorseCard/HorseCard.vue'
@@ -82,9 +82,8 @@ import AppPagination from 'src/components/ui/AppPagination/AppPagination.vue'
 import { useCurrentUserStore } from 'src/stores/currentUser'
 import { useHorsesStore } from 'src/stores/horses'
 import { useUsersStore } from 'src/stores/users'
+import { notifySuccess } from 'src/utils/notifySuccess'
 import { canCreateHorse } from 'src/utils/permissions'
-
-const $q = useQuasar()
 
 const horsesStore = useHorsesStore()
 const currentUserStore = useCurrentUserStore()
@@ -129,7 +128,6 @@ const curatorOptions = computed(() => {
 
 const filteredHorses = computed(() => {
   let result = [...horses.value]
-
   const search = searchQuery.value.trim().toLowerCase()
 
   if (search) {
@@ -147,9 +145,7 @@ const filteredHorses = computed(() => {
   }
 
   if (selectedSort.value === 'arrival_date_desc') {
-    result.sort(
-      (a, b) => new Date(b.arrival_date) - new Date(a.arrival_date)
-    )
+    result.sort((a, b) => new Date(b.arrival_date) - new Date(a.arrival_date))
   }
 
   if (selectedSort.value === 'status') {
@@ -175,7 +171,7 @@ const paginatedHorses = computed(() => {
 
 const openCreateDialog = async () => {
   await usersStore.fetchUsers().catch(() => {
-    $q.notify({
+    Notify.create({
       type: 'negative',
       message: usersStore.error || 'Не удалось загрузить список кураторов',
     })
@@ -210,12 +206,9 @@ const handleCreateHorse = async (payload) => {
     currentPage.value = 1
     isCreateDialogOpen.value = false
 
-    $q.notify({
-      type: 'positive',
-      message: 'Лошадь успешно добавлена',
-    })
+    notifySuccess('Лошадь успешно добавлена')
   } catch (err) {
-    $q.notify({
+    Notify.create({
       type: 'negative',
       message: err.response?.data?.detail || err.message || 'Не удалось добавить лошадь',
     })

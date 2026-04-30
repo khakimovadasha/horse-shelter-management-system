@@ -1,0 +1,76 @@
+.form {
+  width: min(100%, 476px);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fieldsRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+
+.control {
+  :global(.q-field) {
+    margin: 0;
+  }
+
+  :global(.q-field__bottom) {
+    display: none;
+  }
+
+  :global(.q-field__control) {
+    height: 40px;
+    border-radius: 12px;
+    background: #fff;
+  }
+
+  :global(.q-field__native),
+  :global(.q-field__input),
+  :global(.q-field__marginal) {
+    font-size: 14px;
+  }
+}
+
+.controlTextarea {
+  :global(.q-field__control) {
+    min-height: 104px;
+    height: auto;
+    background: #fff;
+  }
+}
+
+.checkboxRow {
+  padding-top: 4px;
+}
+
+.primaryButton {
+  :global(.q-btn) {
+    min-height: 42px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    box-shadow: 0 10px 20px rgba(80, 117, 80, 0.16);
+  }
+}
+
+.secondaryButton {
+  :global(.q-btn) {
+    min-height: 42px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+}
+
+@media (max-width: 640px) {
+  .form {
+    width: 100%;
+  }
+
+  .fieldsRow {
+    grid-template-columns: 1fr;
+  }
+}

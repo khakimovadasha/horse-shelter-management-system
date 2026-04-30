@@ -1,0 +1,11 @@
+.root {
+  :global(.q-checkbox__label) {
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--text-primary);
+  }
+
+  :global(.q-checkbox__inner) {
+    color: var(--primary);
+  }
+}

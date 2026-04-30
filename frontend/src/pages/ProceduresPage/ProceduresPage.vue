@@ -7,11 +7,13 @@
       </div>
 
       <AppButton
+        v-if="canCreate"
         icon="add"
         label="Добавить процедуру"
         color="primary"
         unelevated
         :class="$style.addButton"
+        @click="isCreateDialogOpen = true"
       />
     </div>
 
@@ -48,24 +50,31 @@
         </div>
       </template>
     </div>
+
+    <ProcedureCreateDialog
+      v-model="isCreateDialogOpen"
+      :horse-options="procedureHorseOptions"
+      :submitting="isCreatingProcedure"
+      @submit="handleCreateProcedure"
+    />
   </q-page>
 </template>
 
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useQuasar } from 'quasar'
-import { completeProcedure } from 'src/api/procedures'
+import { Notify } from 'quasar'
+import { completeProcedure, createProcedure } from 'src/api/procedures'
+import ProcedureCreateDialog from 'src/components/blocks/ProcedureCreateDialog/ProcedureCreateDialog.vue'
 import ProceduresFilters from 'src/components/blocks/ProceduresFilters/ProceduresFilters.vue'
 import ProceduresTable from 'src/components/blocks/ProceduresTable/ProceduresTable.vue'
 import AppButton from 'src/components/ui/AppButton/AppButton.vue'
 import AppPagination from 'src/components/ui/AppPagination/AppPagination.vue'
 import { useCurrentUserStore } from 'src/stores/currentUser'
 import { useHorsesStore } from 'src/stores/horses'
+import { useMedicalRecordsStore } from 'src/stores/medicalRecords'
 import { useProceduresStore } from 'src/stores/procedures'
-import { canCompleteProcedure } from 'src/utils/permissions'
-
-const $q = useQuasar()
+import { canCompleteProcedure, canCreateProcedure } from 'src/utils/permissions'
 
 const PAGE_SIZE = 8
 
@@ -74,9 +83,12 @@ const selectedStatus = ref('all')
 const selectedHorseId = ref('all')
 const currentPage = ref(1)
 const completingIds = ref([])
+const isCreateDialogOpen = ref(false)
+const isCreatingProcedure = ref(false)
 
 const horsesStore = useHorsesStore()
 const currentUserStore = useCurrentUserStore()
+const medicalRecordsStore = useMedicalRecordsStore()
 const proceduresStore = useProceduresStore()
 
 const { items: horses } = storeToRefs(horsesStore)
@@ -87,7 +99,9 @@ const {
   error: proceduresError,
 } = storeToRefs(proceduresStore)
 
+const canCreate = computed(() => canCreateProcedure(currentUser.value))
 const canComplete = computed(() => canCompleteProcedure(currentUser.value))
+
 const now = () => Date.now()
 
 const getHorseName = (horseId) => {
@@ -132,6 +146,15 @@ const horseOptions = computed(() => {
   return [{ label: 'Все лошади', value: 'all' }, ...items]
 })
 
+const procedureHorseOptions = computed(() => {
+  return horses.value
+    .map((horse) => ({
+      label: horse.name,
+      value: horse.id,
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label, 'ru'))
+})
+
 const filteredProcedures = computed(() => {
   let result = procedures.value.map(mapProcedure)
   const search = searchQuery.value.trim().toLowerCase()
@@ -173,7 +196,40 @@ const loadProceduresPage = async () => {
       currentUserStore.fetchCurrentUser().catch(() => {}),
     ])
   } catch {
-    // Процедуры и так положат текст ошибки в store.
+    // Текст ошибки уже лежит в store процедур.
+  }
+}
+
+const handleCreateProcedure = async (payload) => {
+  if (!canCreate.value || isCreatingProcedure.value) {
+    return
+  }
+
+  isCreatingProcedure.value = true
+
+  try {
+    const createdProcedure = await createProcedure(payload.horse_id, {
+      procedure_name: payload.procedure_name,
+      notes: payload.notes,
+      planned_date: payload.planned_date,
+      add_to_medical_record: payload.add_to_medical_record,
+    })
+
+    proceduresStore.addProcedure(createdProcedure)
+    isCreateDialogOpen.value = false
+    currentPage.value = 1
+
+    Notify.create({
+      type: 'positive',
+      message: 'Процедура добавлена',
+    })
+  } catch (err) {
+    Notify.create({
+      type: 'negative',
+      message: err.response?.data?.detail || 'Не удалось добавить процедуру',
+    })
+  } finally {
+    isCreatingProcedure.value = false
   }
 }
 
@@ -189,12 +245,21 @@ const handleCompleteProcedure = async (row) => {
 
     proceduresStore.updateProcedure(updatedProcedure)
 
-    $q.notify({
+    const medicalRecordsCacheKey = String(updatedProcedure.horse_id)
+    const hasCachedMedicalRecords = Boolean(
+      medicalRecordsStore.itemsByHorseId[medicalRecordsCacheKey]
+    )
+
+    if (updatedProcedure.add_to_medical_record && hasCachedMedicalRecords) {
+      await medicalRecordsStore.fetchHorseMedicalRecords(updatedProcedure.horse_id, true)
+    }
+
+    Notify.create({
       type: 'positive',
       message: 'Процедура отмечена как выполненная',
     })
   } catch (err) {
-    $q.notify({
+    Notify.create({
       type: 'negative',
       message: err.response?.data?.detail || 'Не удалось отметить процедуру как выполненную',
     })

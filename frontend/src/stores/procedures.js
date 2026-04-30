@@ -38,5 +38,11 @@ export const useProceduresStore = defineStore('procedures', {
       this.loaded = true
       this.error = ''
     },
+
+    addProcedure(procedure) {
+      this.items = [procedure, ...this.items]
+      this.loaded = true
+      this.error = ''
+    },
   },
 })

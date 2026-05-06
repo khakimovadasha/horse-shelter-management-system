@@ -18,6 +18,10 @@
         <span :class="$style.procedureType">{{ value }}</span>
       </template>
 
+      <template #cell-notes="{ value }">
+        <div :class="$style.notesCell">{{ value }}</div>
+      </template>
+
       <template #cell-scheduledAt="{ row }">
         <div :class="$style.dateTime">
           <div :class="$style.date">{{ formatDate(row.scheduledAt) }}</div>
@@ -82,6 +86,11 @@
         </div>
 
         <div :class="$style.mobileMeta">
+          <div :class="[$style.mobileMetaItem, $style.mobileMetaItemStacked]">
+            <span :class="$style.mobileMetaLabel">Описание</span>
+            <span :class="[$style.mobileMetaValue, $style.mobileNotes]">{{ row.notes }}</span>
+          </div>
+
           <div :class="$style.mobileMetaItem">
             <span :class="$style.mobileMetaLabel">Дата</span>
             <span :class="$style.mobileMetaValue">{{ formatDate(row.scheduledAt) }}</span>
@@ -156,6 +165,7 @@ const isMobile = computed(() => $q.screen.lt.md)
 const columns = [
   { key: 'horseName', label: 'Лошадь' },
   { key: 'procedureType', label: 'Тип процедуры' },
+  { key: 'notes', label: 'Описание' },
   { key: 'scheduledAt', label: 'Дата и время' },
   { key: 'status', label: 'Статус' },
   { key: 'addToMedicalRecord', label: 'В медкарту', align: 'center' },

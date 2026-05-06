@@ -129,6 +129,7 @@ const mapProcedure = (procedure) => {
     horseId: procedure.horse_id,
     horseName: getHorseName(procedure.horse_id),
     procedureType: procedure.procedure_name,
+    notes: procedure.notes?.trim() || 'Без описания',
     scheduledAt: procedure.completed_date || procedure.planned_date,
     status: displayStatus,
     addToMedicalRecord: procedure.add_to_medical_record,

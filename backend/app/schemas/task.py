@@ -12,6 +12,17 @@ class TaskCreate(BaseModel):
     due_date: datetime
 
 
+class TaskHorseRead(BaseModel):
+    id: int
+    name: str
+
+
+class TaskExecutorRead(BaseModel):
+    id: int
+    first_name: str
+    last_name: str
+
+
 class TaskRead(BaseModel):
     id: int
     title: str
@@ -23,6 +34,8 @@ class TaskRead(BaseModel):
     started_at: datetime | None
     completed_at: datetime | None
     created_at: datetime
+    horse: TaskHorseRead | None = None
+    executor: TaskExecutorRead | None = None
 
     model_config = {
         "from_attributes": True,

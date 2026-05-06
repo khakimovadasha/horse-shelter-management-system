@@ -37,7 +37,7 @@
         <AuthField
           v-model="form.email"
           label="Email"
-          placeholder="anna@shelter.ru"
+          placeholder="user@shelter.ru"
         />
 
         <AuthField

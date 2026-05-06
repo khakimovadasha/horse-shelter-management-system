@@ -52,3 +52,15 @@
   color: #f44336;
   border: 1px solid rgba(244, 67, 54, 0.22);
 }
+
+.waiting {
+  background: rgba(96, 125, 139, 0.1);
+  color: #90a4ae;
+  border: 1px solid rgba(144, 164, 174, 0.22);
+}
+
+.inProgress {
+  background: rgba(41, 98, 255, 0.1);
+  color: #2962ff;
+  border: 1px solid rgba(41, 98, 255, 0.24);
+}

@@ -40,7 +40,6 @@ def create_medical_record(
         record_type=data.record_type,
         title=data.title,
         description=data.description,
-        next_procedure_date=data.next_procedure_date,
     )
 
     db.add(new_record)

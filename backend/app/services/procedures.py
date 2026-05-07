@@ -27,7 +27,6 @@ def complete_procedure_entity(
             record_type=MedicalRecordType.procedure,
             title=procedure.procedure_name,
             description=procedure.notes or procedure.procedure_name,
-            next_procedure_date=None,
         )
         db.add(medical_record)
 

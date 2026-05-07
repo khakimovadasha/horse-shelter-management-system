@@ -1,29 +1,16 @@
 <template>
   <q-form :class="$style.form" @submit.prevent="handleSubmit">
-    <div :class="$style.fieldsRow">
-      <AppFormField label="Тип записи">
-        <AppSelectField
-          v-model="form.recordType"
-          hide-bottom-space
-          :class="$style.control"
-          :options="recordTypeOptions"
-          placeholder="Выберите тип записи"
-          :error="Boolean(errors.recordType)"
-          :error-message="errors.recordType"
-        />
-      </AppFormField>
-
-      <AppFormField label="Следующая процедура">
-        <AppTextField
-          v-model="form.nextProcedureDate"
-          hide-bottom-space
-          :class="$style.control"
-          type="date"
-          :error="Boolean(errors.nextProcedureDate)"
-          :error-message="errors.nextProcedureDate"
-        />
-      </AppFormField>
-    </div>
+    <AppFormField label="Тип записи">
+      <AppSelectField
+        v-model="form.recordType"
+        hide-bottom-space
+        :class="$style.control"
+        :options="recordTypeOptions"
+        placeholder="Выберите тип записи"
+        :error="Boolean(errors.recordType)"
+        :error-message="errors.recordType"
+      />
+    </AppFormField>
 
     <AppFormField label="Заголовок">
       <AppTextField
@@ -96,7 +83,6 @@ const createInitialForm = () => ({
   recordType: null,
   title: '',
   description: '',
-  nextProcedureDate: '',
 })
 
 const props = defineProps({
@@ -145,7 +131,6 @@ const handleSubmit = () => {
     record_type: form.value.recordType,
     title: form.value.title.trim(),
     description: form.value.description.trim(),
-    next_procedure_date: form.value.nextProcedureDate || null,
   })
 }
 

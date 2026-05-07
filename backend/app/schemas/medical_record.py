@@ -11,7 +11,6 @@ class MedicalRecordRead(BaseModel):
     record_type: MedicalRecordType
     title: str
     description: str
-    next_procedure_date: datetime | None
     created_at: datetime
     updated_at: datetime
 
@@ -24,4 +23,3 @@ class MedicalRecordCreate(BaseModel):
     record_type: MedicalRecordType
     title: str
     description: str
-    next_procedure_date: datetime | None = None

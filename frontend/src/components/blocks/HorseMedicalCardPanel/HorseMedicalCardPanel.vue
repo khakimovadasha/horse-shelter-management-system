@@ -50,10 +50,6 @@
           <div :class="$style.timelineTitle">{{ record.title }}</div>
 
           <div :class="$style.text">{{ record.description }}</div>
-
-          <div v-if="record.next_procedure_date" :class="$style.text">
-            Следующая процедура: {{ formatDate(record.next_procedure_date) }}
-          </div>
         </div>
       </div>
     </div>

@@ -7,10 +7,42 @@ from app.db.session import get_db
 from app.models.horse import Horse
 from app.models.procedure import Procedure, ProcedureStatus
 from app.models.user import User
-from app.schemas.procedure import ProcedureCreate, ProcedureRead, ProcedureComplete
+from app.schemas.procedure import (
+    ProcedureComplete,
+    ProcedureCreate,
+    ProcedureHorseRead,
+    ProcedureRead,
+)
 from app.services.procedures import complete_procedure_entity
 
 router = APIRouter(tags=["Procedures"])
+
+
+def serialize_procedure(procedure: Procedure, db: Session) -> ProcedureRead:
+    horse_payload = None
+
+    horse = db.execute(
+        select(Horse).where(Horse.id == procedure.horse_id)
+    ).scalar_one_or_none()
+    if horse is not None:
+        horse_payload = ProcedureHorseRead(
+            id=horse.id,
+            name=horse.name,
+        )
+
+    return ProcedureRead(
+        id=procedure.id,
+        horse_id=procedure.horse_id,
+        procedure_name=procedure.procedure_name,
+        notes=procedure.notes,
+        planned_date=procedure.planned_date,
+        completed_date=procedure.completed_date,
+        status=procedure.status,
+        add_to_medical_record=procedure.add_to_medical_record,
+        created_at=procedure.created_at,
+        updated_at=procedure.updated_at,
+        horse=horse_payload,
+    )
 
 
 @router.get("/procedures", response_model=list[ProcedureRead])
@@ -23,7 +55,7 @@ def get_procedures(
         .order_by(Procedure.planned_date.asc(), Procedure.id.asc())
     ).scalars().all()
 
-    return procedures
+    return [serialize_procedure(procedure, db) for procedure in procedures]
 
 
 @router.get("/horses/{horse_id}/procedures", response_model=list[ProcedureRead])
@@ -38,7 +70,7 @@ def get_procedures_by_horse(
         .order_by(Procedure.planned_date.asc(), Procedure.id.asc())
     ).scalars().all()
 
-    return procedures
+    return [serialize_procedure(procedure, db) for procedure in procedures]
 
 
 @router.post("/horses/{horse_id}/procedures", response_model=ProcedureRead)
@@ -65,7 +97,7 @@ def create_procedure(
     db.commit()
     db.refresh(procedure)
 
-    return procedure
+    return serialize_procedure(procedure, db)
 
 
 @router.post("/horses/{horse_id}/procedures/{procedure_id}/complete", response_model=ProcedureRead)
@@ -95,4 +127,4 @@ def complete_procedure(
     db.commit()
     db.refresh(procedure)
 
-    return procedure
+    return serialize_procedure(procedure, db)

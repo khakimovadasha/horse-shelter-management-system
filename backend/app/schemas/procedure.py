@@ -12,6 +12,11 @@ class ProcedureCreate(BaseModel):
     add_to_medical_record: bool = False
 
 
+class ProcedureHorseRead(BaseModel):
+    id: int
+    name: str
+
+
 class ProcedureRead(BaseModel):
     id: int
     horse_id: int
@@ -23,6 +28,7 @@ class ProcedureRead(BaseModel):
     add_to_medical_record: bool
     created_at: datetime
     updated_at: datetime
+    horse: ProcedureHorseRead | None = None
 
     model_config = {
         "from_attributes": True

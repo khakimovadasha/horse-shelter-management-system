@@ -44,7 +44,7 @@ defineProps({
     default: 'all',
   },
   executor: {
-    type: String,
+    type: [String, Number],
     default: 'all',
   },
   horseOptions: {
@@ -62,7 +62,7 @@ defineEmits(['update:status', 'update:horseId', 'update:executor'])
 const statusOptions = [
   { label: 'Все статусы', value: 'all' },
   { label: 'Ожидает', value: 'waiting' },
-  { label: 'В работе', value: 'inProgress' },
+  { label: 'В работе', value: 'in_progress' },
   { label: 'Выполнено', value: 'completed' },
 ]
 </script>

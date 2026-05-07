@@ -44,11 +44,21 @@
     </div>
 
     <AppButton
-      v-if="primaryActionLabel"
-      :label="primaryActionLabel"
-      :outline="task.status === 'waiting'"
-      :unelevated="task.status === 'inProgress'"
-      :class="[$style.primaryAction, task.status === 'inProgress' && $style.primaryActionFilled]"
+      v-if="showStartButton"
+      label="Взять в работу"
+      outline
+      :class="$style.primaryAction"
+      :disable="startLoading"
+      @click="$emit('start', task)"
+    />
+
+    <AppButton
+      v-else-if="showCompleteButton"
+      :label="completeLoading ? 'Завершение...' : 'Завершить'"
+      unelevated
+      :class="[$style.primaryAction, $style.primaryActionFilled]"
+      :disable="completeLoading"
+      @click="$emit('complete', task)"
     />
   </article>
 </template>
@@ -63,13 +73,27 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  currentUserId: {
+    type: Number,
+    default: null,
+  },
+  startLoading: {
+    type: Boolean,
+    default: false,
+  },
+  completeLoading: {
+    type: Boolean,
+    default: false,
+  },
 })
+
+defineEmits(['start', 'complete'])
 
 const statusLabel = computed(() => {
   switch (props.task.status) {
     case 'waiting':
       return 'Ожидает'
-    case 'inProgress':
+    case 'in_progress':
       return 'В работе'
     case 'completed':
       return 'Выполнено'
@@ -82,8 +106,8 @@ const statusTone = computed(() => {
   switch (props.task.status) {
     case 'waiting':
       return 'waiting'
-    case 'inProgress':
-      return 'inProgress'
+    case 'in_progress':
+      return 'in_progress'
     case 'completed':
       return 'completed'
     default:
@@ -91,21 +115,18 @@ const statusTone = computed(() => {
   }
 })
 
-const primaryActionLabel = computed(() => {
-  if (props.task.status === 'waiting') {
-    return 'Взять в работу'
-  }
+const showStartButton = computed(() => props.task.status === 'waiting')
 
-  if (props.task.status === 'inProgress') {
-    return 'Выполнено'
-  }
-
-  return ''
+const showCompleteButton = computed(() => {
+  return (
+    props.task.status === 'in_progress' &&
+    props.task.executorId === props.currentUserId
+  )
 })
 
-const formattedDueDate = computed(() => {
+const formattedDate = computed(() => {
   const sourceDate = props.task.status === 'completed'
-    ? props.task.completedDate || props.task.dueDate
+    ? props.task.completedAt || props.task.dueDate
     : props.task.dueDate
 
   return new Intl.DateTimeFormat('ru-RU', {
@@ -113,8 +134,6 @@ const formattedDueDate = computed(() => {
     month: 'long',
   }).format(new Date(sourceDate))
 })
-
-const formattedDate = computed(() => formattedDueDate.value)
 
 const dateLabel = computed(() => {
   return props.task.status === 'completed' ? 'Дата выполнения' : 'Плановая дата'

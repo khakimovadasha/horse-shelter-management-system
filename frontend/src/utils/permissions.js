@@ -19,3 +19,5 @@ export const canCreateProcedure = (user) => {
 export const canCompleteProcedure = (user) => {
   return isAdmin(user) || isVeterinarian(user)
 }
+
+export const canCreateTask = (user) => isAdmin(user)

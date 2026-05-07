@@ -106,7 +106,6 @@ const BASE_PROCEDURE_OPTIONS = [
   'Обработка раны',
   'Физиотерапия',
   'Расчистка копыт',
-  'Другое...',
 ].map((name) => ({
   label: name,
   value: name,
@@ -201,8 +200,6 @@ const validateForm = () => {
   const procedureName = form.value.procedureName.trim()
   if (!procedureName) {
     nextErrors.procedureName = 'Укажите название процедуры'
-  } else if (procedureName === 'Другое...') {
-    nextErrors.procedureName = 'Введите собственное название процедуры'
   } else if (procedureName.length > 100) {
     nextErrors.procedureName = 'Название процедуры не должно превышать 100 символов'
   }

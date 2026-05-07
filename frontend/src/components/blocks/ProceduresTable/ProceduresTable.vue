@@ -162,15 +162,22 @@ const emit = defineEmits(['complete'])
 const $q = useQuasar()
 const isMobile = computed(() => $q.screen.lt.md)
 
-const columns = [
-  { key: 'horseName', label: 'Лошадь' },
-  { key: 'procedureType', label: 'Тип процедуры' },
-  { key: 'notes', label: 'Описание' },
-  { key: 'scheduledAt', label: 'Дата и время' },
-  { key: 'status', label: 'Статус' },
-  { key: 'addToMedicalRecord', label: 'В медкарту', align: 'center' },
-  { key: 'actions', label: 'Действия', align: 'right' },
-]
+const columns = computed(() => {
+  const baseColumns = [
+    { key: 'horseName', label: 'Лошадь' },
+    { key: 'procedureType', label: 'Тип процедуры' },
+    { key: 'notes', label: 'Описание' },
+    { key: 'scheduledAt', label: 'Дата и время' },
+    { key: 'status', label: 'Статус' },
+    { key: 'addToMedicalRecord', label: 'В медкарту', align: 'center' },
+  ]
+
+  if (props.canComplete) {
+    baseColumns.push({ key: 'actions', label: 'Действия', align: 'right' })
+  }
+
+  return baseColumns
+})
 
 const statusMap = {
   planned: { label: 'Запланировано', tone: 'planned' },

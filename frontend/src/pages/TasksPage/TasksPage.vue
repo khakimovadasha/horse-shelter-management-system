@@ -41,7 +41,7 @@
 
       <div v-else :class="$style.grid">
         <TaskCard
-          v-for="task in filteredTasks"
+          v-for="task in paginatedTasks"
           :key="task.id"
           :task="task"
           :current-user-id="currentUser?.id ?? null"
@@ -49,6 +49,13 @@
           :complete-loading="completingIds.includes(task.id)"
           @start="handleStartTask"
           @complete="handleCompleteTask"
+        />
+      </div>
+
+      <div v-if="!tasksLoading && !tasksError && totalPages > 1" :class="$style.pagination">
+        <AppPagination
+          v-model="currentPage"
+          :max="totalPages"
         />
       </div>
     </div>
@@ -64,7 +71,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { Notify } from 'quasar'
 import { completeTask, createTask, startTask } from 'src/api/tasks'
@@ -72,11 +79,14 @@ import TaskCard from 'src/components/blocks/TaskCard/TaskCard.vue'
 import TaskCreateDialog from 'src/components/blocks/TaskCreateDialog/TaskCreateDialog.vue'
 import TasksFilters from 'src/components/blocks/TasksFilters/TasksFilters.vue'
 import AppButton from 'src/components/ui/AppButton/AppButton.vue'
+import AppPagination from 'src/components/ui/AppPagination/AppPagination.vue'
 import { useCurrentUserStore } from 'src/stores/currentUser'
 import { useHorsesStore } from 'src/stores/horses'
 import { useTasksStore } from 'src/stores/tasks'
 import { canCreateTask } from 'src/utils/permissions'
 import { notifySuccess } from 'src/utils/notifySuccess'
+
+const PAGE_SIZE = 6
 
 const selectedStatus = ref('all')
 const selectedHorseId = ref('all')
@@ -85,6 +95,7 @@ const startingIds = ref([])
 const completingIds = ref([])
 const isCreateDialogOpen = ref(false)
 const creatingTask = ref(false)
+const currentPage = ref(1)
 
 const tasksStore = useTasksStore()
 const horsesStore = useHorsesStore()
@@ -174,6 +185,16 @@ const filteredTasks = computed(() => {
     .sort((a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime())
 })
 
+const totalPages = computed(() => {
+  return Math.max(1, Math.ceil(filteredTasks.value.length / PAGE_SIZE))
+})
+
+const paginatedTasks = computed(() => {
+  const startIndex = (currentPage.value - 1) * PAGE_SIZE
+  const endIndex = startIndex + PAGE_SIZE
+  return filteredTasks.value.slice(startIndex, endIndex)
+})
+
 const loadTasksPage = async () => {
   try {
     await Promise.all([
@@ -197,6 +218,7 @@ const handleCreateTask = async (payload) => {
     const createdTask = await createTask(payload)
     tasksStore.addTask(createdTask)
     isCreateDialogOpen.value = false
+    currentPage.value = 1
     notifySuccess('Задача успешно создана')
   } catch (err) {
     Notify.create({
@@ -249,6 +271,16 @@ const handleCompleteTask = async (task) => {
     completingIds.value = completingIds.value.filter((id) => id !== task.id)
   }
 }
+
+watch([selectedStatus, selectedHorseId, selectedExecutorId], () => {
+  currentPage.value = 1
+})
+
+watch(totalPages, (pages) => {
+  if (currentPage.value > pages) {
+    currentPage.value = pages
+  }
+})
 
 onMounted(loadTasksPage)
 </script>

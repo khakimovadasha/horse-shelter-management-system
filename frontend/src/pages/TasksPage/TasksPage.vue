@@ -13,6 +13,7 @@
         color="primary"
         unelevated
         :class="$style.addButton"
+        @click="isCreateDialogOpen = true"
       />
     </div>
 
@@ -21,7 +22,7 @@
       v-model:status="selectedStatus"
       v-model:horse-id="selectedHorseId"
       v-model:executor="selectedExecutorId"
-      :horse-options="horseOptions"
+      :horse-options="horseFilterOptions"
       :executor-options="executorOptions"
     />
 
@@ -51,6 +52,14 @@
         />
       </div>
     </div>
+
+    <TaskCreateDialog
+      v-if="canCreate"
+      v-model="isCreateDialogOpen"
+      :horse-options="taskHorseOptions"
+      :submitting="creatingTask"
+      @submit="handleCreateTask"
+    />
   </q-page>
 </template>
 
@@ -58,8 +67,9 @@
 import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { Notify } from 'quasar'
-import { completeTask, startTask } from 'src/api/tasks'
+import { completeTask, createTask, startTask } from 'src/api/tasks'
 import TaskCard from 'src/components/blocks/TaskCard/TaskCard.vue'
+import TaskCreateDialog from 'src/components/blocks/TaskCreateDialog/TaskCreateDialog.vue'
 import TasksFilters from 'src/components/blocks/TasksFilters/TasksFilters.vue'
 import AppButton from 'src/components/ui/AppButton/AppButton.vue'
 import { useCurrentUserStore } from 'src/stores/currentUser'
@@ -73,6 +83,8 @@ const selectedHorseId = ref('all')
 const selectedExecutorId = ref('all')
 const startingIds = ref([])
 const completingIds = ref([])
+const isCreateDialogOpen = ref(false)
+const creatingTask = ref(false)
 
 const tasksStore = useTasksStore()
 const horsesStore = useHorsesStore()
@@ -109,15 +121,21 @@ const mapTask = (task) => ({
     new Date(task.due_date).getTime() < now(),
 })
 
-const horseOptions = computed(() => {
-  const items = horses.value
+const sortedHorseOptions = computed(() => {
+  return horses.value
     .map((horse) => ({
       label: horse.name,
       value: horse.id,
     }))
     .sort((a, b) => a.label.localeCompare(b.label, 'ru'))
+})
 
-  return [{ label: 'Все лошади', value: 'all' }, ...items]
+const horseFilterOptions = computed(() => {
+  return [{ label: 'Все лошади', value: 'all' }, ...sortedHorseOptions.value]
+})
+
+const taskHorseOptions = computed(() => {
+  return [{ label: 'Без привязки к лошади', value: null }, ...sortedHorseOptions.value]
 })
 
 const executorOptions = computed(() => {
@@ -165,6 +183,28 @@ const loadTasksPage = async () => {
     ])
   } catch {
     // Текст ошибки уже лежит в tasksStore.
+  }
+}
+
+const handleCreateTask = async (payload) => {
+  if (creatingTask.value) {
+    return
+  }
+
+  creatingTask.value = true
+
+  try {
+    const createdTask = await createTask(payload)
+    tasksStore.addTask(createdTask)
+    isCreateDialogOpen.value = false
+    notifySuccess('Задача успешно создана')
+  } catch (err) {
+    Notify.create({
+      type: 'negative',
+      message: err.response?.data?.detail || 'Не удалось создать задачу',
+    })
+  } finally {
+    creatingTask.value = false
   }
 }
 

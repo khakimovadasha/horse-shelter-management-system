@@ -3,11 +3,14 @@
   align-items: center;
   justify-content: center;
   min-height: 32px;
+  min-width: 100px;
   padding: 0 14px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 700;
   line-height: 1;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .healthy {

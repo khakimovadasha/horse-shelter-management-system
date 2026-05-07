@@ -12,6 +12,11 @@ export const getTasks = async () => {
   return response.data
 }
 
+export const createTask = async (payload) => {
+  const response = await api.post('/tasks', payload, withAuth())
+  return response.data
+}
+
 export const startTask = async (taskId) => {
   const response = await api.post(`/tasks/${taskId}/start`, {}, withAuth())
   return response.data

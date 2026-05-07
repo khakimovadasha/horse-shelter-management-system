@@ -1,15 +1,26 @@
 from datetime import datetime
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 from app.models.task import TaskStatus
 
+TASK_TITLE_MAX_LENGTH = 100
+TASK_DESCRIPTION_MAX_LENGTH = 255
+
 
 class TaskCreate(BaseModel):
-    title: str = Field(min_length=1, max_length=150)
-    description: str = Field(min_length=1)
+    title: str = Field(min_length=1, max_length=TASK_TITLE_MAX_LENGTH)
+    description: str = Field(min_length=1, max_length=TASK_DESCRIPTION_MAX_LENGTH)
     horse_id: int | None = None
     due_date: datetime
+
+    @field_validator("title", "description")
+    @classmethod
+    def validate_trimmed_text(cls, value: str) -> str:
+        trimmed = value.strip()
+        if not trimmed:
+            raise ValueError("Поле не может быть пустым")
+        return trimmed
 
 
 class TaskHorseRead(BaseModel):

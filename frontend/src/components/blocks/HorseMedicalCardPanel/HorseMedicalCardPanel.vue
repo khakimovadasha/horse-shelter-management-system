@@ -1,13 +1,11 @@
 <template>
-  <q-card :class="[$style.root, 'app-card']">
-    <div :class="$style.header">
-      <div>
-        <div :class="$style.title">Медицинская карта</div>
-        <div :class="$style.subtitle">История медицинских записей</div>
-      </div>
-
+  <AppDataPanel
+    v-bind="attrs"
+    title="Медицинская карта"
+    subtitle="История медицинских записей"
+  >
+    <template v-if="canCreateRecord" #actions>
       <AppButton
-        v-if="canCreateRecord"
         color="primary"
         unelevated
         no-caps
@@ -16,7 +14,7 @@
         :class="$style.addButton"
         @click="isCreateDialogOpen = true"
       />
-    </div>
+    </template>
 
     <div :class="$style.timeline">
       <div :class="$style.line"></div>
@@ -53,7 +51,7 @@
         </div>
       </div>
     </div>
-  </q-card>
+  </AppDataPanel>
 
   <MedicalRecordCreateDialog
     v-model="isCreateDialogOpen"
@@ -63,16 +61,21 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, useAttrs, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { Notify } from 'quasar'
 import { createHorseMedicalRecord } from 'src/api/horses'
+import AppDataPanel from 'src/components/blocks/AppDataPanel/AppDataPanel.vue'
 import MedicalRecordCreateDialog from 'src/components/blocks/MedicalRecordCreateDialog/MedicalRecordCreateDialog.vue'
 import AppButton from 'src/components/ui/AppButton/AppButton.vue'
 import { useCurrentUserStore } from 'src/stores/currentUser'
 import { useMedicalRecordsStore } from 'src/stores/medicalRecords'
 import { notifySuccess } from 'src/utils/notifySuccess'
 import { canCreateMedicalRecord } from 'src/utils/permissions'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = defineProps({
   horseId: {
@@ -81,6 +84,7 @@ const props = defineProps({
   },
 })
 
+const attrs = useAttrs()
 const medicalRecordsStore = useMedicalRecordsStore()
 const currentUserStore = useCurrentUserStore()
 

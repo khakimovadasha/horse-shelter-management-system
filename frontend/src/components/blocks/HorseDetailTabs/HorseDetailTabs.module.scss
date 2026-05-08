@@ -1,17 +1,18 @@
 .root {
-  padding: 8px;
+  padding: 10px;
   border-radius: 999px;
   overflow-x: auto;
+  background: #efede7;
 }
 
 .list {
   display: grid;
   grid-template-columns: repeat(4, minmax(180px, 1fr));
-  gap: 8px;
+  gap: 10px;
 }
 
 .item {
-  min-height: 48px;
+  min-height: 56px;
   border: 0;
   border-radius: 999px;
   background: transparent;
@@ -19,9 +20,10 @@
   font-weight: 700;
   color: var(--text-primary);
   cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
 }
 
 .itemActive {
   background: #ffffff;
-  box-shadow: var(--shadow-xs);
+  box-shadow: 0 10px 24px rgba(31, 42, 55, 0.08);
 }

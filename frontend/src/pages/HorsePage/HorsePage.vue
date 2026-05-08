@@ -21,9 +21,31 @@
         @edit="openEditDialog"
       />
 
-      <HorseDetailTabs class="q-mt-lg" />
+      <HorseDetailTabs
+        v-model="activeTab"
+        class="q-mt-lg"
+      />
 
-      <HorseMedicalCardPanel :horse-id="horse.id" class="q-mt-lg" />
+      <HorseMedicalCardPanel
+        v-if="activeTab === 'medical'"
+        :horse-id="horse.id"
+        :class="$style.detailPanel"
+      />
+
+      <HorseProceduresPanel
+        v-else-if="activeTab === 'procedures'"
+        :class="$style.detailPanel"
+      />
+
+      <HorseTasksPanel
+        v-else-if="activeTab === 'tasks'"
+        :class="$style.detailPanel"
+      />
+
+      <HorseDocumentsPanel
+        v-else
+        :class="$style.detailPanel"
+      />
 
       <HorseEditDialog
         v-model="isEditDialogOpen"
@@ -45,7 +67,10 @@ import { updateHorse } from 'src/api/horses'
 import HorseEditDialog from 'src/components/blocks/HorseEditDialog/HorseEditDialog.vue'
 import HorseProfileHeader from 'src/components/blocks/HorseProfileHeader/HorseProfileHeader.vue'
 import HorseDetailTabs from 'src/components/blocks/HorseDetailTabs/HorseDetailTabs.vue'
+import HorseDocumentsPanel from 'src/components/blocks/HorseDocumentsPanel/HorseDocumentsPanel.vue'
 import HorseMedicalCardPanel from 'src/components/blocks/HorseMedicalCardPanel/HorseMedicalCardPanel.vue'
+import HorseProceduresPanel from 'src/components/blocks/HorseProceduresPanel/HorseProceduresPanel.vue'
+import HorseTasksPanel from 'src/components/blocks/HorseTasksPanel/HorseTasksPanel.vue'
 import { useCurrentUserStore } from 'src/stores/currentUser'
 import { useHorseDetailsStore } from 'src/stores/horseDetails'
 import { useHorsesStore } from 'src/stores/horses'
@@ -68,6 +93,7 @@ const loading = computed(() => Boolean(horseDetailsStore.loadingById[horseId.val
 const error = computed(() => horseDetailsStore.errorById[horseId.value] || '')
 const isEditDialogOpen = ref(false)
 const isUpdatingHorse = ref(false)
+const activeTab = ref('medical')
 
 const canEditHorse = computed(() => canEditHorsePermission(currentUser.value))
 
@@ -155,6 +181,7 @@ watch(
   () => {
     loadHorse()
     isEditDialogOpen.value = false
+    activeTab.value = 'medical'
   }
 )
 </script>

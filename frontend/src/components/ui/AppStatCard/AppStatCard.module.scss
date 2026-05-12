@@ -1,0 +1,143 @@
+.card {
+  min-height: 170px;
+  padding: 24px 24px 22px;
+  border: 1px solid #dde5ec;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(31, 42, 55, 0.03);
+}
+
+.title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.content {
+  min-height: 86px;
+  margin-top: 26px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.value {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1.05;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.valueDefault {
+  color: var(--text-primary);
+}
+
+.valueSuccess {
+  color: var(--green);
+}
+
+.valueDanger {
+  color: var(--red);
+}
+
+.subtitle {
+  margin: 8px 0 0;
+  font-size: 0.94rem;
+  line-height: 1.35;
+  color: var(--text-secondary);
+}
+
+.iconBox {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+}
+
+.iconBoxNeutral {
+  background: #eef3ee;
+  color: #2f6c39;
+}
+
+.iconBoxSuccess {
+  background: #e7f7f1;
+  color: #009d6f;
+}
+
+.iconBoxDanger {
+  background: #fff0f0;
+  color: #ef2f2f;
+}
+
+.iconBoxInfo {
+  background: #ebf4ff;
+  color: #276bff;
+}
+
+.icon {
+  font-size: 1.75rem;
+}
+
+@media (max-width: 768px) {
+  .card {
+    min-height: 150px;
+    padding: 20px 18px 18px;
+    border-radius: 20px;
+  }
+
+  .content {
+    min-height: 74px;
+    margin-top: 20px;
+  }
+
+  .value {
+    font-size: 1.75rem;
+  }
+
+  .iconBox {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+  }
+}
+
+@media (max-width: 540px) {
+  .card {
+    min-height: 132px;
+    padding: 18px 16px 16px;
+    border-radius: 18px;
+  }
+
+  .content {
+    min-height: 64px;
+    align-items: center;
+    margin-top: 16px;
+    gap: 14px;
+  }
+
+  .value {
+    font-size: 1.5rem;
+  }
+
+  .subtitle {
+    margin-top: 6px;
+    font-size: 0.86rem;
+  }
+
+  .iconBox {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+  }
+
+  .icon {
+    font-size: 1.45rem;
+  }
+}

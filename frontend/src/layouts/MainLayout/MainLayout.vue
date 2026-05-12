@@ -153,6 +153,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { getAccessToken, removeAccessToken } from 'src/api/auth'
 import { useCurrentUserStore } from 'src/stores/currentUser'
+import { canViewFinances } from 'src/utils/permissions'
 
 const route = useRoute()
 const router = useRouter()
@@ -177,7 +178,7 @@ const userInitials = computed(() => {
   return initials || 'П'
 })
 
-const navItems = [
+const baseNavItems = [
   { label: 'Главная', to: '/app', icon: 'home' },
   { label: 'Лошади', to: '/app/horses', icon: 'favorite_border' },
   { label: 'Процедуры', to: '/app/procedures', icon: 'monitor_heart' },
@@ -187,6 +188,16 @@ const navItems = [
   { label: 'Отчёты', to: '/app/reports', icon: 'description' },
   // { label: 'Пользователи', to: '/users', icon: 'group' },
 ]
+
+const navItems = computed(() => {
+  return baseNavItems.filter((item) => {
+    if (item.to === '/app/finances') {
+      return canViewFinances(currentUserStore.user)
+    }
+
+    return true
+  })
+})
 
 const isActive = (path) => {
   if (path === '/app') {

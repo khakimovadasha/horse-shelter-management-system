@@ -1,0 +1,55 @@
+.state {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.stateError {
+  color: var(--red);
+}
+
+.typeBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 0.98rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.typeBadgeIncome {
+  background: #e7f7f1;
+  border: 1px solid rgba(0, 157, 111, 0.24);
+  color: #009d6f;
+}
+
+.typeBadgeExpense {
+  background: #fff0f0;
+  border: 1px solid rgba(239, 47, 47, 0.24);
+  color: #ef2f2f;
+}
+
+.categoryBadge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: #ede7dc;
+  color: var(--text-primary);
+  font-size: 0.98rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.amountIncome {
+  color: #009d6f;
+  font-weight: 500;
+}
+
+.amountExpense {
+  color: #ef2f2f;
+  font-weight: 500;
+}

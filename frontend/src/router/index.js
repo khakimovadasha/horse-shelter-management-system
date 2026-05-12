@@ -1,6 +1,8 @@
 import { defineRouter } from '#q-app/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import { getAccessToken } from 'src/api/auth'
+import { useCurrentUserStore } from 'src/stores/currentUser'
+import { canViewFinances } from 'src/utils/permissions'
 import routes from './routes'
 
 /*
@@ -27,7 +29,7 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.VUE_ROUTER_BASE)
   })
 
-  Router.beforeEach((to) => {
+  Router.beforeEach(async (to) => {
     const isPrivateRoute = to.path.startsWith('/app')
     const isAuthRoute = to.name === 'login' || to.name === 'register'
     const hasToken = Boolean(getAccessToken())
@@ -38,6 +40,22 @@ export default defineRouter(function (/* { store, ssrContext } */) {
 
     if (isAuthRoute && hasToken) {
       return { name: 'dashboard' }
+    }
+
+    if (to.meta.requiresAdmin && hasToken) {
+      const currentUserStore = useCurrentUserStore()
+
+      if (!currentUserStore.loaded && !currentUserStore.loading) {
+        try {
+          await currentUserStore.fetchCurrentUser()
+        } catch {
+          return { name: 'login' }
+        }
+      }
+
+      if (!canViewFinances(currentUserStore.user)) {
+        return { name: 'dashboard' }
+      }
     }
 
     return true

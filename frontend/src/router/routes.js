@@ -59,6 +59,7 @@ const routes = [
       {
         path: 'finances',
         name: 'finances',
+        meta: { requiresAdmin: true },
         component: () => import('pages/FinancesPage/FinancesPage.vue'),
       },
       {

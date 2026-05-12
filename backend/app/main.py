@@ -8,6 +8,7 @@ from app.api.users import router as users_router
 from app.api.medical_records import router as medical_records_router
 from app.api.procedures import router as procedures_router
 from app.api.tasks import router as tasks_router
+from app.api.finance_operations import router as finance_operations_router
 
 app = FastAPI(title="Horse Shelter API")
 
@@ -28,6 +29,7 @@ app.include_router(users_router, prefix="/api")
 app.include_router(medical_records_router, prefix="/api")
 app.include_router(procedures_router, prefix="/api")
 app.include_router(tasks_router, prefix="/api")
+app.include_router(finance_operations_router, prefix="/api")
 
 app.mount("/media", StaticFiles(directory="media"), name="media")
 

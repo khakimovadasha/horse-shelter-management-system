@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getTasks } from 'src/api/tasks'
+import { getHorseTasks, getTasks } from 'src/api/tasks'
 
 export const useTasksStore = defineStore('tasks', {
   state: () => ({
@@ -7,6 +7,9 @@ export const useTasksStore = defineStore('tasks', {
     loading: false,
     error: '',
     loaded: false,
+    itemsByHorseId: {},
+    loadingByHorseId: {},
+    errorByHorseId: {},
   }),
 
   actions: {
@@ -33,14 +36,79 @@ export const useTasksStore = defineStore('tasks', {
       }
     },
 
+    async fetchHorseTasks(horseId, force = false) {
+      const id = String(horseId)
+
+      if (this.loadingByHorseId[id]) {
+        return
+      }
+
+      if (this.itemsByHorseId[id] && !force) {
+        return
+      }
+
+      this.loadingByHorseId = {
+        ...this.loadingByHorseId,
+        [id]: true,
+      }
+      this.errorByHorseId = {
+        ...this.errorByHorseId,
+        [id]: '',
+      }
+
+      try {
+        this.itemsByHorseId = {
+          ...this.itemsByHorseId,
+          [id]: await getHorseTasks(horseId),
+        }
+      } catch (err) {
+        this.errorByHorseId = {
+          ...this.errorByHorseId,
+          [id]: err.response?.data?.detail || err.message || 'Не удалось загрузить задачи',
+        }
+        throw err
+      } finally {
+        this.loadingByHorseId = {
+          ...this.loadingByHorseId,
+          [id]: false,
+        }
+      }
+    },
+
     updateTask(task) {
       this.items = this.items.map((item) => (item.id === task.id ? task : item))
+
+      if (task.horse_id !== null) {
+        const horseId = String(task.horse_id)
+        const horseItems = this.itemsByHorseId[horseId]
+
+        if (horseItems) {
+          this.itemsByHorseId = {
+            ...this.itemsByHorseId,
+            [horseId]: horseItems.map((item) => (item.id === task.id ? task : item)),
+          }
+        }
+      }
+
       this.loaded = true
       this.error = ''
     },
 
     addTask(task) {
       this.items = [task, ...this.items]
+
+      if (task.horse_id !== null) {
+        const horseId = String(task.horse_id)
+        const horseItems = this.itemsByHorseId[horseId]
+
+        if (horseItems) {
+          this.itemsByHorseId = {
+            ...this.itemsByHorseId,
+            [horseId]: [task, ...horseItems],
+          }
+        }
+      }
+
       this.loaded = true
       this.error = ''
     },

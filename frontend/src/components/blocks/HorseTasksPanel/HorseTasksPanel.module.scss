@@ -1,0 +1,122 @@
+.state {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.addButton {
+  min-height: 50px;
+  border-radius: 16px;
+}
+
+.stateError {
+  color: var(--red);
+}
+
+.list {
+  display: grid;
+  gap: 18px;
+}
+
+.item {
+  padding: 20px 22px;
+  border: 1px solid #dde4d8;
+  border-radius: 20px;
+}
+
+.itemDanger {
+  border-color: rgba(244, 67, 54, 0.28);
+}
+
+.itemHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.description {
+  margin: 10px 0 0;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.meta {
+  margin-top: 18px;
+  display: grid;
+  gap: 10px;
+}
+
+.metaRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+.metaLabel {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.metaValue {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: left;
+}
+
+.metaValueDanger {
+  color: var(--red);
+}
+
+.overdueBanner {
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  margin-top: 18px;
+  border: 1px solid #f1c5c2;
+  border-radius: 6px;
+  background: #fff2f2;
+  font-size: 0.92rem;
+  color: #f44336;
+}
+
+.primaryAction {
+  min-height: 46px;
+  border-radius: 14px;
+  font-weight: 700;
+  margin-top: 18px;
+}
+
+.primaryActionFilled {
+  background: var(--green);
+}
+
+@media (max-width: 768px) {
+  .item {
+    padding: 18px;
+  }
+
+  .itemHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .metaRow {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .metaValue {
+    text-align: left;
+  }
+}

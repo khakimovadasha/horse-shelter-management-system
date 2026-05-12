@@ -8,6 +8,7 @@
           :class="$style.control"
           :options="horseOptions"
           placeholder="Выберите лошадь"
+          :disable="disableHorseSelection"
         />
       </AppFormField>
 
@@ -102,6 +103,14 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  initialHorseId: {
+    type: Number,
+    default: null,
+  },
+  disableHorseSelection: {
+    type: Boolean,
+    default: false,
+  },
   submitting: {
     type: Boolean,
     default: false,
@@ -118,7 +127,10 @@ const form = ref(createInitialForm())
 const errors = ref({})
 
 const resetForm = () => {
-  form.value = createInitialForm()
+  form.value = {
+    ...createInitialForm(),
+    horseId: props.initialHorseId,
+  }
   errors.value = {}
 }
 

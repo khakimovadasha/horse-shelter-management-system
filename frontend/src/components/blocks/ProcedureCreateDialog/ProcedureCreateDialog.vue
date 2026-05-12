@@ -8,6 +8,8 @@
     <ProcedureForm
       :is-open="modelValue"
       :horse-options="horseOptions"
+      :initial-horse-id="initialHorseId"
+      :disable-horse-selection="disableHorseSelection"
       :submitting="submitting"
       submit-label="Добавить"
       @cancel="$emit('update:modelValue', false)"
@@ -28,6 +30,14 @@ defineProps({
   horseOptions: {
     type: Array,
     default: () => [],
+  },
+  initialHorseId: {
+    type: Number,
+    default: null,
+  },
+  disableHorseSelection: {
+    type: Boolean,
+    default: false,
   },
   submitting: {
     type: Boolean,

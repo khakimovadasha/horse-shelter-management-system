@@ -34,11 +34,15 @@
 
       <HorseProceduresPanel
         v-else-if="activeTab === 'procedures'"
+        :horse-id="horse.id"
+        :horse-name="horse.name"
         :class="$style.detailPanel"
       />
 
       <HorseTasksPanel
         v-else-if="activeTab === 'tasks'"
+        :horse-id="horse.id"
+        :horse-name="horse.name"
         :class="$style.detailPanel"
       />
 
@@ -74,6 +78,9 @@ import HorseTasksPanel from 'src/components/blocks/HorseTasksPanel/HorseTasksPan
 import { useCurrentUserStore } from 'src/stores/currentUser'
 import { useHorseDetailsStore } from 'src/stores/horseDetails'
 import { useHorsesStore } from 'src/stores/horses'
+import { useMedicalRecordsStore } from 'src/stores/medicalRecords'
+import { useProceduresStore } from 'src/stores/procedures'
+import { useTasksStore } from 'src/stores/tasks'
 import { useUsersStore } from 'src/stores/users'
 import { notifySuccess } from 'src/utils/notifySuccess'
 import { canEditHorse as canEditHorsePermission } from 'src/utils/permissions'
@@ -82,6 +89,9 @@ const route = useRoute()
 const horseDetailsStore = useHorseDetailsStore()
 const currentUserStore = useCurrentUserStore()
 const horsesStore = useHorsesStore()
+const medicalRecordsStore = useMedicalRecordsStore()
+const proceduresStore = useProceduresStore()
+const tasksStore = useTasksStore()
 const usersStore = useUsersStore()
 
 const { user: currentUser } = storeToRefs(currentUserStore)
@@ -114,6 +124,12 @@ const curatorOptions = computed(() => {
 
 const loadHorse = async () => {
   await horseDetailsStore.fetchHorse(horseId.value).catch(() => {})
+
+  await Promise.all([
+    medicalRecordsStore.fetchHorseMedicalRecords(horseId.value).catch(() => {}),
+    proceduresStore.fetchHorseProcedures(horseId.value).catch(() => {}),
+    tasksStore.fetchHorseTasks(horseId.value).catch(() => {}),
+  ])
 }
 
 const openEditDialog = async () => {

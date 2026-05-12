@@ -12,6 +12,11 @@ export const getProcedures = async () => {
   return response.data
 }
 
+export const getHorseProcedures = async (horseId) => {
+  const response = await api.get(`/horses/${horseId}/procedures`, withAuth())
+  return response.data
+}
+
 export const createProcedure = async (horseId, payload) => {
   const response = await api.post(`/horses/${horseId}/procedures`, payload, withAuth())
   return response.data

@@ -12,6 +12,11 @@ export const getTasks = async () => {
   return response.data
 }
 
+export const getHorseTasks = async (horseId) => {
+  const response = await api.get(`/horses/${horseId}/tasks`, withAuth())
+  return response.data
+}
+
 export const createTask = async (payload) => {
   const response = await api.post('/tasks', payload, withAuth())
   return response.data

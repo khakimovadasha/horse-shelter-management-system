@@ -8,6 +8,7 @@
           :class="$style.control"
           :options="horseOptions"
           placeholder="Выберите лошадь"
+          :disable="disableHorseSelection"
           :error="Boolean(errors.horseId)"
           :error-message="errors.horseId"
         />
@@ -128,6 +129,14 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  initialHorseId: {
+    type: Number,
+    default: null,
+  },
+  disableHorseSelection: {
+    type: Boolean,
+    default: false,
+  },
   submitting: {
     type: Boolean,
     default: false,
@@ -164,7 +173,10 @@ const getProcedureOptions = (search = '') => {
 }
 
 const resetForm = () => {
-  form.value = createInitialForm()
+  form.value = {
+    ...createInitialForm(),
+    horseId: props.initialHorseId,
+  }
   errors.value = {}
   customProcedureOption.value = null
   filteredProcedureOptions.value = getProcedureOptions()

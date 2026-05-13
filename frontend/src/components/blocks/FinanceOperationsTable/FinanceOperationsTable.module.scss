@@ -44,6 +44,11 @@
   white-space: nowrap;
 }
 
+.descriptionCell {
+  white-space: normal;
+  word-break: break-word;
+}
+
 .amountIncome {
   color: #009d6f;
   font-weight: 500;
@@ -52,4 +57,52 @@
 .amountExpense {
   color: #ef2f2f;
   font-weight: 500;
+}
+
+.mobileList {
+  display: grid;
+  gap: 16px;
+}
+
+.mobileCard {
+  border: 1.5px solid #dbe3ea;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 10px 24px rgba(31, 42, 55, 0.04);
+  padding: 18px 16px;
+}
+
+.mobileHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.mobileDate {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.mobileAmount {
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.mobileBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.mobileDescription {
+  margin-top: 14px;
+  font-size: 0.98rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+  white-space: normal;
+  word-break: break-word;
 }

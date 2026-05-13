@@ -16,3 +16,8 @@ export const getFinanceSummary = async () => {
   const response = await api.get('/finance-operations/summary', withAuth())
   return response.data
 }
+
+export const createFinanceOperation = async (payload) => {
+  const response = await api.post('/finance-operations', payload, withAuth())
+  return response.data
+}

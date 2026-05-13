@@ -63,5 +63,30 @@ export const useFinanceOperationsStore = defineStore('financeOperations', {
         this.summaryLoading = false
       }
     },
+
+    addFinanceOperation(operation) {
+      this.items = [operation, ...this.items]
+      this.loaded = true
+      this.error = ''
+
+      const amount = Number(operation.amount || 0)
+
+      if (operation.operation_type === 'income') {
+        this.summary = {
+          ...this.summary,
+          total_income: Number(this.summary.total_income || 0) + amount,
+          balance: Number(this.summary.balance || 0) + amount,
+        }
+      } else {
+        this.summary = {
+          ...this.summary,
+          total_expense: Number(this.summary.total_expense || 0) + amount,
+          balance: Number(this.summary.balance || 0) - amount,
+        }
+      }
+
+      this.summaryLoaded = true
+      this.summaryError = ''
+    },
   },
 })

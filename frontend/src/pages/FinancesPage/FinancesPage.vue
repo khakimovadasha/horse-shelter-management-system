@@ -13,6 +13,7 @@
         icon="add"
         label="Добавить операцию"
         :class="$style.addButton"
+        @click="isCreateDialogOpen = true"
       />
     </div>
 
@@ -56,23 +57,35 @@
         :error="error"
       />
     </div>
+
+    <FinanceOperationCreateDialog
+      v-model="isCreateDialogOpen"
+      :submitting="isCreatingOperation"
+      @submit="handleCreateOperation"
+    />
   </q-page>
 </template>
 
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
+import { Notify } from 'quasar'
+import { createFinanceOperation } from 'src/api/financeOperations'
 import FinanceFilters from 'src/components/blocks/FinanceFilters/FinanceFilters.vue'
+import FinanceOperationCreateDialog from 'src/components/blocks/FinanceOperationCreateDialog/FinanceOperationCreateDialog.vue'
 import FinanceOperationsTable from 'src/components/blocks/FinanceOperationsTable/FinanceOperationsTable.vue'
 import AppStatCard from 'src/components/ui/AppStatCard/AppStatCard.vue'
 import AppButton from 'src/components/ui/AppButton/AppButton.vue'
 import { useFinanceOperationsStore } from 'src/stores/financeOperations'
+import { notifySuccess } from 'src/utils/notifySuccess'
 
 const financeOperationsStore = useFinanceOperationsStore()
 const { items, loading, error, summary } = storeToRefs(financeOperationsStore)
 
 const operationType = ref('all')
 const category = ref('all')
+const isCreateDialogOpen = ref(false)
+const isCreatingOperation = ref(false)
 
 const categoryLabels = {
   donations: 'Пожертвования',
@@ -137,6 +150,28 @@ onMounted(() => {
   financeOperationsStore.fetchFinanceOperations().catch(() => {})
   financeOperationsStore.fetchFinanceSummary().catch(() => {})
 })
+
+const handleCreateOperation = async (payload) => {
+  if (isCreatingOperation.value) {
+    return
+  }
+
+  isCreatingOperation.value = true
+
+  try {
+    const createdOperation = await createFinanceOperation(payload)
+    financeOperationsStore.addFinanceOperation(createdOperation)
+    isCreateDialogOpen.value = false
+    notifySuccess('Финансовая операция успешно добавлена')
+  } catch (err) {
+    Notify.create({
+      type: 'negative',
+      message: err.response?.data?.detail || 'Не удалось добавить финансовую операцию',
+    })
+  } finally {
+    isCreatingOperation.value = false
+  }
+}
 </script>
 
 <style module lang="scss" src="./FinancesPage.module.scss"></style>

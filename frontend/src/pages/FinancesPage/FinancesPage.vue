@@ -56,6 +56,13 @@
         :loading="loading"
         :error="error"
       />
+
+      <div v-if="totalPages > 1" :class="$style.pagination">
+        <AppPagination
+          v-model="currentPage"
+          :max="totalPages"
+        />
+      </div>
     </div>
 
     <FinanceOperationCreateDialog
@@ -67,23 +74,27 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { Notify } from 'quasar'
 import { createFinanceOperation } from 'src/api/financeOperations'
 import FinanceFilters from 'src/components/blocks/FinanceFilters/FinanceFilters.vue'
 import FinanceOperationCreateDialog from 'src/components/blocks/FinanceOperationCreateDialog/FinanceOperationCreateDialog.vue'
 import FinanceOperationsTable from 'src/components/blocks/FinanceOperationsTable/FinanceOperationsTable.vue'
-import AppStatCard from 'src/components/ui/AppStatCard/AppStatCard.vue'
 import AppButton from 'src/components/ui/AppButton/AppButton.vue'
+import AppPagination from 'src/components/ui/AppPagination/AppPagination.vue'
+import AppStatCard from 'src/components/ui/AppStatCard/AppStatCard.vue'
 import { useFinanceOperationsStore } from 'src/stores/financeOperations'
 import { notifySuccess } from 'src/utils/notifySuccess'
+
+const PAGE_SIZE = 8
 
 const financeOperationsStore = useFinanceOperationsStore()
 const { items, loading, error, summary } = storeToRefs(financeOperationsStore)
 
 const operationType = ref('all')
 const category = ref('all')
+const currentPage = ref(1)
 const isCreateDialogOpen = ref(false)
 const isCreatingOperation = ref(false)
 
@@ -112,8 +123,17 @@ const filteredOperations = computed(() => {
   })
 })
 
+const totalPages = computed(() => {
+  return Math.max(1, Math.ceil(filteredOperations.value.length / PAGE_SIZE))
+})
+
+const paginatedOperations = computed(() => {
+  const start = (currentPage.value - 1) * PAGE_SIZE
+  return filteredOperations.value.slice(start, start + PAGE_SIZE)
+})
+
 const tableRows = computed(() => {
-  return filteredOperations.value.map((operation) => ({
+  return paginatedOperations.value.map((operation) => ({
     id: operation.id,
     operationType: operation.operation_type,
     operationTypeLabel: operation.operation_type === 'income' ? 'Доход' : 'Расход',
@@ -172,6 +192,16 @@ const handleCreateOperation = async (payload) => {
     isCreatingOperation.value = false
   }
 }
+
+watch([operationType, category], () => {
+  currentPage.value = 1
+})
+
+watch(totalPages, (nextTotalPages) => {
+  if (currentPage.value > nextTotalPages) {
+    currentPage.value = nextTotalPages
+  }
+})
 </script>
 
 <style module lang="scss" src="./FinancesPage.module.scss"></style>

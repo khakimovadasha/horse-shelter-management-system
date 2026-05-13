@@ -59,6 +59,12 @@
   font-weight: 500;
 }
 
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
 .mobileList {
   display: grid;
   gap: 16px;
@@ -66,43 +72,79 @@
 
 .mobileCard {
   border: 1.5px solid #dbe3ea;
-  border-radius: 20px;
+  border-radius: 22px;
   background: #fff;
   box-shadow: 0 10px 24px rgba(31, 42, 55, 0.04);
-  padding: 18px 16px;
+  padding: 20px 18px;
 }
 
 .mobileHeader {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
+  gap: 14px;
+}
+
+.mobileSummary {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.mobileHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.mobileActionButton {
+  min-height: 36px;
+  min-width: 36px;
+  border-radius: 12px;
+
+  :global(.q-icon) {
+    font-size: 18px;
+  }
 }
 
 .mobileDate {
   font-size: 0.95rem;
+  line-height: 1.35;
   color: var(--text-secondary);
 }
 
 .mobileAmount {
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  text-align: right;
   white-space: nowrap;
+  line-height: 1.1;
 }
 
 .mobileBadges {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 14px;
+  gap: 10px 8px;
+  margin-top: 18px;
 }
 
-.mobileDescription {
-  margin-top: 14px;
+.mobileDescriptionBlock {
+  margin-top: 18px;
   font-size: 0.98rem;
   line-height: 1.5;
   color: var(--text-primary);
   white-space: normal;
   word-break: break-word;
+  border-top: 1px solid rgba(35, 48, 68, 0.08);
+  padding-top: 14px;
+}
+
+.mobileDescriptionLabel {
+  margin-bottom: 6px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }

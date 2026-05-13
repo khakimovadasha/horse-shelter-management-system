@@ -18,12 +18,8 @@
               />
             </div>
 
-            <AppButton
+            <AppEditAction
               v-if="canEdit"
-              outline
-              no-caps
-              icon="edit"
-              label=""
               dense
               :class="[$style.editButton, $style.editButtonMobile]"
               @click="$emit('edit')"
@@ -69,12 +65,8 @@
         </div>
       </div>
 
-      <AppButton
+      <AppEditAction
         v-if="canEdit"
-        outline
-        no-caps
-        icon="edit"
-        label=""
         :class="[$style.editButton, $style.editButtonDesktop]"
         @click="$emit('edit')"
       />
@@ -91,7 +83,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import AppButton from 'src/components/ui/AppButton/AppButton.vue'
+import AppEditAction from 'src/components/ui/AppEditAction/AppEditAction.vue'
 import AppInfoItem from 'src/components/ui/AppInfoItem/AppInfoItem.vue'
 import AppStatusBadge from 'src/components/ui/AppStatusBadge/AppStatusBadge.vue'
 import {

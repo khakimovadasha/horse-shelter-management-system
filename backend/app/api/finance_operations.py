@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -13,7 +13,9 @@ from app.schemas.finance_operation import (
     FinanceOperationCreate,
     FinanceOperationHorseRead,
     FinanceOperationRead,
+    FinanceOperationUpdate,
     FinanceSummaryRead,
+    validate_finance_category_matches_type,
 )
 
 router = APIRouter(tags=["Finance"])
@@ -44,6 +46,17 @@ def serialize_finance_operation(operation: FinanceOperation, db: Session) -> Fin
         updated_at=operation.updated_at,
         horse=horse_payload,
     )
+
+
+def ensure_horse_exists(horse_id: int | None, db: Session) -> None:
+    if horse_id is None:
+        return
+
+    horse = db.execute(
+        select(Horse).where(Horse.id == horse_id)
+    ).scalar_one_or_none()
+    if horse is None:
+        raise HTTPException(status_code=404, detail="Лошадь не найдена")
 
 
 @router.get("/finance-operations", response_model=list[FinanceOperationRead])
@@ -88,12 +101,7 @@ def create_finance_operation(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_admin),
 ):
-    if data.horse_id is not None:
-        horse = db.execute(
-            select(Horse).where(Horse.id == data.horse_id)
-        ).scalar_one_or_none()
-        if horse is None:
-            raise HTTPException(status_code=404, detail="Лошадь не найдена")
+    ensure_horse_exists(data.horse_id, db)
 
     operation = FinanceOperation(
         operation_type=data.operation_type,
@@ -109,3 +117,56 @@ def create_finance_operation(
     db.refresh(operation)
 
     return serialize_finance_operation(operation, db)
+
+
+@router.patch("/finance-operations/{operation_id}", response_model=FinanceOperationRead)
+def update_finance_operation(
+    operation_id: int,
+    data: FinanceOperationUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_admin),
+):
+    operation = db.execute(
+        select(FinanceOperation).where(FinanceOperation.id == operation_id)
+    ).scalar_one_or_none()
+    if operation is None:
+        raise HTTPException(status_code=404, detail="Финансовая операция не найдена")
+
+    payload = data.model_dump(exclude_unset=True)
+
+    next_operation_type = payload.get("operation_type", operation.operation_type)
+    next_category = payload.get("category", operation.category)
+
+    try:
+        validate_finance_category_matches_type(next_operation_type, next_category)
+    except ValueError as err:
+        raise HTTPException(status_code=422, detail=str(err)) from err
+
+    if "horse_id" in payload:
+        ensure_horse_exists(payload["horse_id"], db)
+
+    for field_name, value in payload.items():
+        setattr(operation, field_name, value)
+
+    db.commit()
+    db.refresh(operation)
+
+    return serialize_finance_operation(operation, db)
+
+
+@router.delete("/finance-operations/{operation_id}", status_code=204)
+def delete_finance_operation(
+    operation_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_admin),
+):
+    operation = db.execute(
+        select(FinanceOperation).where(FinanceOperation.id == operation_id)
+    ).scalar_one_or_none()
+    if operation is None:
+        raise HTTPException(status_code=404, detail="Финансовая операция не найдена")
+
+    db.delete(operation)
+    db.commit()
+
+    return Response(status_code=204)

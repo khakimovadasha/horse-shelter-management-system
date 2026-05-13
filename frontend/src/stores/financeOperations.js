@@ -1,6 +1,24 @@
 import { defineStore } from 'pinia'
 import { getFinanceOperations, getFinanceSummary } from 'src/api/financeOperations'
 
+const getOperationAmount = (operation) => Number(operation?.amount || 0)
+
+const calculateSummary = (items) => {
+  const totalIncome = items
+    .filter((operation) => operation.operation_type === 'income')
+    .reduce((sum, operation) => sum + getOperationAmount(operation), 0)
+
+  const totalExpense = items
+    .filter((operation) => operation.operation_type === 'expense')
+    .reduce((sum, operation) => sum + getOperationAmount(operation), 0)
+
+  return {
+    total_income: totalIncome,
+    total_expense: totalExpense,
+    balance: totalIncome - totalExpense,
+  }
+}
+
 export const useFinanceOperationsStore = defineStore('financeOperations', {
   state: () => ({
     items: [],
@@ -64,29 +82,38 @@ export const useFinanceOperationsStore = defineStore('financeOperations', {
       }
     },
 
+    refreshSummaryFromItems() {
+      this.summary = calculateSummary(this.items)
+      this.summaryLoaded = true
+      this.summaryError = ''
+    },
+
     addFinanceOperation(operation) {
       this.items = [operation, ...this.items]
       this.loaded = true
       this.error = ''
+      this.refreshSummaryFromItems()
+    },
 
-      const amount = Number(operation.amount || 0)
+    updateFinanceOperation(operation) {
+      const index = this.items.findIndex((item) => item.id === operation.id)
 
-      if (operation.operation_type === 'income') {
-        this.summary = {
-          ...this.summary,
-          total_income: Number(this.summary.total_income || 0) + amount,
-          balance: Number(this.summary.balance || 0) + amount,
-        }
+      if (index === -1) {
+        this.items = [operation, ...this.items]
       } else {
-        this.summary = {
-          ...this.summary,
-          total_expense: Number(this.summary.total_expense || 0) + amount,
-          balance: Number(this.summary.balance || 0) - amount,
-        }
+        this.items = this.items.map((item) => (item.id === operation.id ? operation : item))
       }
 
-      this.summaryLoaded = true
-      this.summaryError = ''
+      this.loaded = true
+      this.error = ''
+      this.refreshSummaryFromItems()
+    },
+
+    removeFinanceOperation(operationId) {
+      this.items = this.items.filter((item) => item.id !== operationId)
+      this.loaded = true
+      this.error = ''
+      this.refreshSummaryFromItems()
     },
   },
 })

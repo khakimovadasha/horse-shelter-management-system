@@ -50,6 +50,13 @@
           {{ row.amount }}
         </span>
       </template>
+
+      <template #cell-actions="{ row }">
+        <div :class="$style.actions">
+          <AppEditAction @click="emit('edit', row)" />
+          <AppDeleteAction @click="emit('delete', row)" />
+        </div>
+      </template>
     </AppDataTable>
 
     <div v-else :class="$style.mobileList">
@@ -64,9 +71,24 @@
         :class="$style.mobileCard"
       >
         <div :class="$style.mobileHeader">
-          <div :class="$style.mobileDate">{{ row.date }}</div>
-          <div :class="[row.operationType === 'income' ? $style.amountIncome : $style.amountExpense, $style.mobileAmount]">
-            {{ row.amount }}
+          <div :class="$style.mobileSummary">
+            <div :class="$style.mobileDate">{{ row.date }}</div>
+            <div :class="[row.operationType === 'income' ? $style.amountIncome : $style.amountExpense, $style.mobileAmount]">
+              {{ row.amount }}
+            </div>
+          </div>
+
+          <div :class="$style.mobileHeaderActions">
+            <AppEditAction
+              dense
+              :class="$style.mobileActionButton"
+              @click="emit('edit', row)"
+            />
+            <AppDeleteAction
+              dense
+              :class="$style.mobileActionButton"
+              @click="emit('delete', row)"
+            />
           </div>
         </div>
 
@@ -84,7 +106,8 @@
           </div>
         </div>
 
-        <div :class="$style.mobileDescription">
+        <div :class="$style.mobileDescriptionBlock">
+          <div :class="$style.mobileDescriptionLabel">Описание</div>
           {{ row.description }}
         </div>
       </article>
@@ -97,6 +120,8 @@ import { computed } from 'vue'
 import { useQuasar } from 'quasar'
 import AppDataPanel from 'src/components/blocks/AppDataPanel/AppDataPanel.vue'
 import AppDataTable from 'src/components/blocks/AppDataTable/AppDataTable.vue'
+import AppDeleteAction from 'src/components/ui/AppDeleteAction/AppDeleteAction.vue'
+import AppEditAction from 'src/components/ui/AppEditAction/AppEditAction.vue'
 
 defineProps({
   rows: {
@@ -113,6 +138,8 @@ defineProps({
   },
 })
 
+const emit = defineEmits(['edit', 'delete'])
+
 const $q = useQuasar()
 const isMobile = computed(() => $q.screen.lt.md)
 
@@ -122,6 +149,7 @@ const columns = computed(() => [
   { key: 'category', label: 'Категория' },
   { key: 'description', label: 'Описание' },
   { key: 'amount', label: 'Сумма', align: 'right' },
+  { key: 'actions', label: 'Действия', align: 'right' },
 ])
 </script>
 

@@ -13,7 +13,7 @@
         icon="add"
         label="Добавить операцию"
         :class="$style.addButton"
-        @click="isCreateDialogOpen = true"
+        @click="openCreateDialog"
       />
     </div>
 
@@ -55,6 +55,8 @@
         :rows="tableRows"
         :loading="loading"
         :error="error"
+        @edit="openEditDialog"
+        @delete="handleDeleteOperation"
       />
 
       <div v-if="totalPages > 1" :class="$style.pagination">
@@ -66,9 +68,10 @@
     </div>
 
     <FinanceOperationCreateDialog
-      v-model="isCreateDialogOpen"
-      :submitting="isCreatingOperation"
-      @submit="handleCreateOperation"
+      v-model="isOperationDialogOpen"
+      :submitting="isSavingOperation"
+      :initial-data="editingOperation"
+      @submit="handleSubmitOperation"
     />
   </q-page>
 </template>
@@ -77,7 +80,11 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { Notify } from 'quasar'
-import { createFinanceOperation } from 'src/api/financeOperations'
+import {
+  createFinanceOperation,
+  deleteFinanceOperation,
+  updateFinanceOperation,
+} from 'src/api/financeOperations'
 import FinanceFilters from 'src/components/blocks/FinanceFilters/FinanceFilters.vue'
 import FinanceOperationCreateDialog from 'src/components/blocks/FinanceOperationCreateDialog/FinanceOperationCreateDialog.vue'
 import FinanceOperationsTable from 'src/components/blocks/FinanceOperationsTable/FinanceOperationsTable.vue'
@@ -95,8 +102,9 @@ const { items, loading, error, summary } = storeToRefs(financeOperationsStore)
 const operationType = ref('all')
 const category = ref('all')
 const currentPage = ref(1)
-const isCreateDialogOpen = ref(false)
-const isCreatingOperation = ref(false)
+const isOperationDialogOpen = ref(false)
+const isSavingOperation = ref(false)
+const editingOperation = ref(null)
 
 const categoryLabels = {
   donations: 'Пожертвования',
@@ -135,6 +143,7 @@ const paginatedOperations = computed(() => {
 const tableRows = computed(() => {
   return paginatedOperations.value.map((operation) => ({
     id: operation.id,
+    source: operation,
     operationType: operation.operation_type,
     operationTypeLabel: operation.operation_type === 'income' ? 'Доход' : 'Расход',
     category: operation.category,
@@ -166,30 +175,72 @@ const formatSignedAmount = (value, operationType) => {
   return `${sign}${number.toLocaleString('ru-RU')} ₽`
 }
 
+const openCreateDialog = () => {
+  editingOperation.value = null
+  isOperationDialogOpen.value = true
+}
+
+const openEditDialog = (row) => {
+  editingOperation.value = row.source
+  isOperationDialogOpen.value = true
+}
+
 onMounted(() => {
   financeOperationsStore.fetchFinanceOperations().catch(() => {})
   financeOperationsStore.fetchFinanceSummary().catch(() => {})
 })
 
-const handleCreateOperation = async (payload) => {
-  if (isCreatingOperation.value) {
+const handleSubmitOperation = async (payload) => {
+  if (isSavingOperation.value) {
     return
   }
 
-  isCreatingOperation.value = true
+  isSavingOperation.value = true
 
   try {
-    const createdOperation = await createFinanceOperation(payload)
-    financeOperationsStore.addFinanceOperation(createdOperation)
-    isCreateDialogOpen.value = false
-    notifySuccess('Финансовая операция успешно добавлена')
+    if (editingOperation.value?.id) {
+      const updatedOperation = await updateFinanceOperation(editingOperation.value.id, payload)
+      financeOperationsStore.updateFinanceOperation(updatedOperation)
+      notifySuccess('Финансовая операция успешно обновлена')
+    } else {
+      const createdOperation = await createFinanceOperation(payload)
+      financeOperationsStore.addFinanceOperation(createdOperation)
+      notifySuccess('Финансовая операция успешно добавлена')
+    }
+
+    isOperationDialogOpen.value = false
+    editingOperation.value = null
   } catch (err) {
     Notify.create({
       type: 'negative',
-      message: err.response?.data?.detail || 'Не удалось добавить финансовую операцию',
+      message: err.response?.data?.detail || 'Не удалось сохранить финансовую операцию',
     })
   } finally {
-    isCreatingOperation.value = false
+    isSavingOperation.value = false
+  }
+}
+
+const handleDeleteOperation = async (row) => {
+  const operation = row.source
+
+  if (!operation?.id) {
+    return
+  }
+
+  const confirmed = window.confirm('Удалить эту финансовую операцию?')
+  if (!confirmed) {
+    return
+  }
+
+  try {
+    await deleteFinanceOperation(operation.id)
+    financeOperationsStore.removeFinanceOperation(operation.id)
+    notifySuccess('Финансовая операция успешно удалена')
+  } catch (err) {
+    Notify.create({
+      type: 'negative',
+      message: err.response?.data?.detail || 'Не удалось удалить финансовую операцию',
+    })
   }
 }
 
@@ -200,6 +251,12 @@ watch([operationType, category], () => {
 watch(totalPages, (nextTotalPages) => {
   if (currentPage.value > nextTotalPages) {
     currentPage.value = nextTotalPages
+  }
+})
+
+watch(isOperationDialogOpen, (isOpen) => {
+  if (!isOpen) {
+    editingOperation.value = null
   }
 })
 </script>

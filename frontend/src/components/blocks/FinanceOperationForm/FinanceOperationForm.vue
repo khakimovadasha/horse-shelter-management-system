@@ -132,12 +132,20 @@ const getTodayDate = () => {
   return `${year}-${month}-${day}`
 }
 
-const createInitialForm = () => ({
-  operationType: null,
-  category: null,
-  amount: '',
-  description: '',
-  date: getTodayDate(),
+const formatDateForInput = (value) => {
+  if (!value) {
+    return getTodayDate()
+  }
+
+  return new Date(value).toISOString().slice(0, 10)
+}
+
+const createInitialForm = (initialData = null) => ({
+  operationType: initialData?.operation_type ?? null,
+  category: initialData?.category ?? null,
+  amount: initialData?.amount != null ? String(initialData.amount) : '',
+  description: initialData?.description ?? '',
+  date: formatDateForInput(initialData?.date),
 })
 
 const props = defineProps({
@@ -152,6 +160,10 @@ const props = defineProps({
   submitLabel: {
     type: String,
     default: 'Добавить',
+  },
+  initialData: {
+    type: Object,
+    default: null,
   },
 })
 
@@ -173,7 +185,7 @@ const filteredCategoryOptions = computed(() => {
 })
 
 const resetForm = () => {
-  form.value = createInitialForm()
+  form.value = createInitialForm(props.initialData)
   errors.value = {}
 }
 
@@ -235,9 +247,32 @@ watch(
 )
 
 watch(
-  () => form.value.operationType,
+  () => props.initialData,
   () => {
-    form.value.category = null
+    if (props.isOpen) {
+      resetForm()
+    }
+  }
+)
+
+watch(
+  () => form.value.operationType,
+  (nextType) => {
+    if (!form.value.category) {
+      return
+    }
+
+    const allowedCategories = nextType === 'income'
+      ? incomeCategoryOptions
+      : nextType === 'expense'
+        ? expenseCategoryOptions
+        : []
+
+    const isCurrentCategoryAllowed = allowedCategories.some((option) => option.value === form.value.category)
+
+    if (!isCurrentCategoryAllowed) {
+      form.value.category = null
+    }
   }
 )
 </script>

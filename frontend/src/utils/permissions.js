@@ -23,3 +23,5 @@ export const canCompleteProcedure = (user) => {
 export const canCreateTask = (user) => isAdmin(user)
 
 export const canViewFinances = (user) => isAdmin(user)
+
+export const canViewUsers = (user) => isAdmin(user)

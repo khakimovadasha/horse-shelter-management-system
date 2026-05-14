@@ -32,5 +32,18 @@ export const useUsersStore = defineStore('users', {
         this.loading = false
       }
     },
+
+    replaceUser(updatedUser) {
+      const index = this.items.findIndex((item) => item.id === updatedUser.id)
+
+      if (index === -1) {
+        this.items = [updatedUser, ...this.items]
+      } else {
+        this.items = this.items.map((item) => (item.id === updatedUser.id ? updatedUser : item))
+      }
+
+      this.loaded = true
+      this.error = ''
+    },
   },
 })

@@ -153,7 +153,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { getAccessToken, removeAccessToken } from 'src/api/auth'
 import { useCurrentUserStore } from 'src/stores/currentUser'
-import { canViewFinances } from 'src/utils/permissions'
+import { canViewFinances, canViewUsers } from 'src/utils/permissions'
 
 const route = useRoute()
 const router = useRouter()
@@ -183,16 +183,19 @@ const baseNavItems = [
   { label: 'Лошади', to: '/app/horses', icon: 'favorite_border' },
   { label: 'Процедуры', to: '/app/procedures', icon: 'monitor_heart' },
   { label: 'Задачи', to: '/app/tasks', icon: 'task_alt' },
-  // { label: 'Календарь', to: '/app/calendar', icon: 'calendar_month' },
   { label: 'Финансы', to: '/app/finances', icon: 'attach_money' },
   { label: 'Отчёты', to: '/app/reports', icon: 'description' },
-  // { label: 'Пользователи', to: '/users', icon: 'group' },
+  { label: 'Пользователи', to: '/app/users', icon: 'group' },
 ]
 
 const navItems = computed(() => {
   return baseNavItems.filter((item) => {
     if (item.to === '/app/finances') {
       return canViewFinances(currentUserStore.user)
+    }
+
+    if (item.to === '/app/users') {
+      return canViewUsers(currentUserStore.user)
     }
 
     return true

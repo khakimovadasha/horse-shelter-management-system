@@ -1,0 +1,14 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.control {
+  width: 100%;
+}
+
+.primaryButton,
+.secondaryButton {
+  min-width: 120px;
+}

@@ -51,11 +51,11 @@ const routes = [
         name: 'tasks',
         component: () => import('pages/TasksPage/TasksPage.vue'),
       },
-      {
-        path: 'calendar',
-        name: 'calendar',
-        component: () => import('pages/CalendarPage/CalendarPage.vue'),
-      },
+      // {
+      //   path: 'calendar',
+      //   name: 'calendar',
+      //   component: () => import('pages/CalendarPage/CalendarPage.vue'),
+      // },
       {
         path: 'finances',
         name: 'finances',
@@ -70,6 +70,7 @@ const routes = [
       {
         path: 'users',
         name: 'users',
+        meta: { requiresAdmin: true },
         component: () => import('pages/UsersPage/UsersPage.vue'),
       },
     ],

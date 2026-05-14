@@ -1,0 +1,31 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filtersSection {
+  margin-top: 28px;
+}
+
+.tableSection {
+  margin-top: 28px;
+}
+
+.pagination {
+  margin-top: 28px;
+}
+
+@media (max-width: 760px) {
+  .filtersSection {
+    margin-top: 22px;
+  }
+
+  .tableSection {
+    margin-top: 22px;
+  }
+
+  .pagination {
+    margin-top: 22px;
+  }
+}

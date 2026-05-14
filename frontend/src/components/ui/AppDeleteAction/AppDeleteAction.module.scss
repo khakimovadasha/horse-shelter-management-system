@@ -5,3 +5,15 @@
   border-radius: 16px;
   flex-shrink: 0;
 }
+
+@media (max-width: 1023px) {
+  .button {
+    min-height: 36px;
+    min-width: 36px;
+    border-radius: 12px;
+
+    :global(.q-icon) {
+      font-size: 18px;
+    }
+  }
+}

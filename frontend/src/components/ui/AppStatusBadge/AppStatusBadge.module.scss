@@ -73,3 +73,33 @@
   color: #2962ff;
   border: 1px solid rgba(41, 98, 255, 0.24);
 }
+
+.admin {
+  background: rgba(112, 135, 83, 0.14);
+  color: #5f7d3c;
+  border: 1px solid rgba(95, 125, 60, 0.24);
+}
+
+.veterinarian {
+  background: rgba(41, 98, 255, 0.1);
+  color: #2962ff;
+  border: 1px solid rgba(41, 98, 255, 0.24);
+}
+
+.volunteer {
+  background: rgba(0, 150, 136, 0.12);
+  color: #009688;
+  border: 1px solid rgba(0, 150, 136, 0.24);
+}
+
+.active {
+  background: rgba(0, 150, 136, 0.12);
+  color: #009688;
+  border: 1px solid rgba(0, 150, 136, 0.24);
+}
+
+.blocked {
+  background: rgba(96, 125, 139, 0.12);
+  color: #78909c;
+  border: 1px solid rgba(120, 144, 156, 0.24);
+}

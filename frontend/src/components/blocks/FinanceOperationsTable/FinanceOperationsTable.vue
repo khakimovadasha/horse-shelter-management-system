@@ -81,12 +81,10 @@
           <div :class="$style.mobileHeaderActions">
             <AppEditAction
               dense
-              :class="$style.mobileActionButton"
               @click="emit('edit', row)"
             />
             <AppDeleteAction
               dense
-              :class="$style.mobileActionButton"
               @click="emit('delete', row)"
             />
           </div>

@@ -127,7 +127,9 @@
   font-size: 1rem;
   font-weight: 600;
   color: #2d2f33;
-  white-space: nowrap;
+  line-height: 1.1;
+  display: flex;
+  flex-direction: column;
 }
 
 .logoutButton {
@@ -203,6 +205,9 @@
   font-size: 1rem;
   font-weight: 700;
   color: var(--text-primary);
+  line-height: 1.1;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 1024px) {

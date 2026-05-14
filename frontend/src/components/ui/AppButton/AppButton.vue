@@ -1,6 +1,7 @@
 <template>
   <q-btn
     v-bind="$attrs"
+    :class="$style.button"
     :color="color"
     :label="label"
     :icon="icon || undefined"

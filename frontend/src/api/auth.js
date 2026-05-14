@@ -14,6 +14,11 @@ export const removeAccessToken = () => {
   localStorage.removeItem(TOKEN_KEY)
 }
 
+export const clearAuthSession = (currentUserStore = null) => {
+  removeAccessToken()
+  currentUserStore?.clearCurrentUser?.()
+}
+
 export const loginUser = async (payload) => {
   const response = await api.post('/auth/login', payload)
   return response.data

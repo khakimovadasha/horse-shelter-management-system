@@ -14,7 +14,7 @@
             @click="leftDrawerOpen = !leftDrawerOpen"
           />
 
-          <RouterLink to="/" :class="$style.logo">
+          <RouterLink to="/app" :class="$style.logo">
             <div :class="$style.logoMark">
               <q-icon name="favorite" size="24px" />
             </div>
@@ -42,7 +42,10 @@
           <q-avatar :class="$style.userAvatar" size="42px">
             {{ userInitials }}
           </q-avatar>
-          <div :class="$style.userName">{{ userDisplayName }}</div>
+          <div :class="$style.userName">
+            <div>{{ userFirstName }}</div>
+            <div v-if="userLastName">{{ userLastName }}</div>
+          </div>
           <q-btn
             flat
             round
@@ -81,7 +84,7 @@
     >
       <div :class="$style.drawerContent">
         <div :class="$style.drawerTop">
-          <RouterLink to="/" :class="$style.logo" @click="closeDrawer">
+          <RouterLink to="/app" :class="$style.logo" @click="closeDrawer">
             <div :class="$style.logoMark">
               <q-icon name="favorite" size="24px" />
             </div>
@@ -125,8 +128,9 @@
           <q-avatar :class="$style.userAvatar" size="42px">
             {{ userInitials }}
           </q-avatar>
-          <div>
-            <div :class="$style.drawerUserName">{{ userDisplayName }}</div>
+          <div :class="$style.drawerUserName">
+            <div>{{ userFirstName }}</div>
+            <div v-if="userLastName">{{ userLastName }}</div>
           </div>
           <q-btn
             flat
@@ -151,7 +155,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
-import { getAccessToken, removeAccessToken } from 'src/api/auth'
+import { clearAuthSession, getAccessToken } from 'src/api/auth'
 import { useCurrentUserStore } from 'src/stores/currentUser'
 import { canViewFinances, canViewUsers } from 'src/utils/permissions'
 
@@ -162,12 +166,12 @@ const currentUserStore = useCurrentUserStore()
 
 const leftDrawerOpen = ref(false)
 
-const userDisplayName = computed(() => {
-  const firstName = currentUserStore.user?.first_name?.trim() || ''
-  const lastName = currentUserStore.user?.last_name?.trim() || ''
-  const fullName = `${firstName} ${lastName}`.trim()
+const userFirstName = computed(() => {
+  return currentUserStore.user?.first_name?.trim() || 'Пользователь'
+})
 
-  return fullName || 'Пользователь'
+const userLastName = computed(() => {
+  return currentUserStore.user?.last_name?.trim() || ''
 })
 
 const userInitials = computed(() => {
@@ -217,8 +221,7 @@ const closeDrawer = () => {
 }
 
 const handleLogout = async () => {
-  removeAccessToken()
-  currentUserStore.clearCurrentUser()
+  clearAuthSession(currentUserStore)
   leftDrawerOpen.value = false
   await router.push('/login')
 }
@@ -228,7 +231,14 @@ onMounted(() => {
     return
   }
 
-  currentUserStore.fetchCurrentUser().catch(() => {})
+  currentUserStore.fetchCurrentUser().catch(async () => {
+    clearAuthSession(currentUserStore)
+    leftDrawerOpen.value = false
+
+    if (route.path.startsWith('/app')) {
+      await router.replace('/login')
+    }
+  })
 })
 </script>
 

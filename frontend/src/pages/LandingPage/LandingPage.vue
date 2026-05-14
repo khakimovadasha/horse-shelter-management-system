@@ -26,7 +26,7 @@
       <div :class="$style.imageWrap">
         <img
           :class="$style.image"
-          src="https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=1200&q=80"
+          :src="heroImageUrl"
           alt="Лошадь"
         />
       </div>
@@ -37,7 +37,10 @@
 </template>
 
 <script setup>
+import { API_BASE_URL } from 'src/boot/axios'
 import LandingFeaturesSection from 'src/components/blocks/LandingFeaturesSection/LandingFeaturesSection.vue'
+
+const heroImageUrl = `${API_BASE_URL}/media/landing-fon.avif`
 </script>
 
 <style module lang="scss" src="./LandingPage.module.scss"></style>

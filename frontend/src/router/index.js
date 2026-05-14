@@ -1,6 +1,6 @@
 import { defineRouter } from '#q-app/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
-import { getAccessToken } from 'src/api/auth'
+import { clearAuthSession, getAccessToken } from 'src/api/auth'
 import { useCurrentUserStore } from 'src/stores/currentUser'
 import { canViewFinances } from 'src/utils/permissions'
 import routes from './routes'
@@ -33,26 +33,37 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     const isPrivateRoute = to.path.startsWith('/app')
     const isAuthRoute = to.name === 'login' || to.name === 'register'
     const hasToken = Boolean(getAccessToken())
+    const currentUserStore = useCurrentUserStore()
 
     if (isPrivateRoute && !hasToken) {
+      clearAuthSession(currentUserStore)
       return { name: 'login' }
     }
 
+    if (isPrivateRoute && hasToken) {
+      try {
+        if (!currentUserStore.loaded || !currentUserStore.user) {
+          await currentUserStore.fetchCurrentUser(true)
+        }
+      } catch {
+        clearAuthSession(currentUserStore)
+        return { name: 'login' }
+      }
+    }
+
     if (isAuthRoute && hasToken) {
-      return { name: 'dashboard' }
+      try {
+        if (!currentUserStore.loaded || !currentUserStore.user) {
+          await currentUserStore.fetchCurrentUser(true)
+        }
+        return { name: 'dashboard' }
+      } catch {
+        clearAuthSession(currentUserStore)
+        return true
+      }
     }
 
     if (to.meta.requiresAdmin && hasToken) {
-      const currentUserStore = useCurrentUserStore()
-
-      if (!currentUserStore.loaded && !currentUserStore.loading) {
-        try {
-          await currentUserStore.fetchCurrentUser()
-        } catch {
-          return { name: 'login' }
-        }
-      }
-
       if (!canViewFinances(currentUserStore.user)) {
         return { name: 'dashboard' }
       }

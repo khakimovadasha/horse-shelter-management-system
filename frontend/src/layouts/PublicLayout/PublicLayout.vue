@@ -8,8 +8,7 @@
           </div>
 
           <div :class="$style.logoText">
-            <div>Приют лошадей</div>
-            <div :class="$style.logoSubtext">Система управления</div>
+            Управление приютом для лошадей
           </div>
         </RouterLink>
 

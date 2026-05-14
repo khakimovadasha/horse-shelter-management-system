@@ -72,16 +72,15 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCurrentUserStore } from 'src/stores/currentUser'
 import AuthCard from 'src/components/blocks/AuthCard/AuthCard.vue'
 import AuthFooter from 'src/components/blocks/AuthFooter/AuthFooter.vue'
 import AuthForm from 'src/components/blocks/AuthForm/AuthForm.vue'
 import AuthField from 'src/components/ui/AuthField/AuthField.vue'
 import AuthSubmitButton from 'src/components/ui/AuthSubmitButton/AuthSubmitButton.vue'
-import { loginUser, registerUser, setAccessToken } from 'src/api/auth'
+import { registerUser } from 'src/api/auth'
+import { notifySuccess } from 'src/utils/notifySuccess'
 
 const router = useRouter()
-const currentUserStore = useCurrentUserStore()
 
 const isSubmitting = ref(false)
 const errorMessage = ref('')
@@ -109,15 +108,8 @@ const handleSubmit = async () => {
       phone: form.phone || null,
     })
 
-    const loginData = await loginUser({
-      email: form.email,
-      password: form.password,
-    })
-
-    setAccessToken(loginData.access_token)
-    currentUserStore.clearCurrentUser()
-    await currentUserStore.fetchCurrentUser(true)
-    await router.push('/app')
+    notifySuccess('Пользователь успешно зарегистрирован')
+    await router.push('/login')
   } catch (error) {
     errorMessage.value =
       error?.response?.data?.detail || 'Не удалось выполнить регистрацию'

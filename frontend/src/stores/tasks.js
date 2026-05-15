@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { getHorseTasks, getTasks } from 'src/api/tasks'
+import { useProfileStore } from 'src/stores/profile'
 
 export const useTasksStore = defineStore('tasks', {
   state: () => ({
@@ -76,6 +77,7 @@ export const useTasksStore = defineStore('tasks', {
     },
 
     updateTask(task) {
+      const profileStore = useProfileStore()
       this.items = this.items.map((item) => (item.id === task.id ? task : item))
 
       if (task.horse_id !== null) {
@@ -90,11 +92,13 @@ export const useTasksStore = defineStore('tasks', {
         }
       }
 
+      profileStore.syncTask(task)
       this.loaded = true
       this.error = ''
     },
 
     addTask(task) {
+      const profileStore = useProfileStore()
       this.items = [task, ...this.items]
 
       if (task.horse_id !== null) {
@@ -109,6 +113,7 @@ export const useTasksStore = defineStore('tasks', {
         }
       }
 
+      profileStore.syncTask(task)
       this.loaded = true
       this.error = ''
     },

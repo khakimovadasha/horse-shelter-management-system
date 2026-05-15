@@ -41,4 +41,40 @@ export const getMe = async () => {
   return response.data
 }
 
+export const getMyProfileSummary = async () => {
+  const token = getAccessToken()
+
+  const response = await api.get('/auth/me/profile-summary', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+
+  return response.data
+}
+
+export const getMyHorses = async () => {
+  const token = getAccessToken()
+
+  const response = await api.get('/auth/me/horses', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+
+  return response.data
+}
+
+export const getMyTasks = async () => {
+  const token = getAccessToken()
+
+  const response = await api.get('/auth/me/tasks', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+
+  return response.data
+}
+
 export { api }

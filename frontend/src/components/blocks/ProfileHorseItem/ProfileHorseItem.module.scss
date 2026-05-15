@@ -1,9 +1,25 @@
+.link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
 .root {
   padding: 22px 18px;
   border: 1px solid #dbe3ea;
   border-radius: 18px;
   background: #fff;
   box-shadow: 0 8px 20px rgba(31, 42, 55, 0.03);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.link:hover .root {
+  transform: translateY(-2px);
+  border-color: #cfdbe6;
+  box-shadow: 0 14px 28px rgba(31, 42, 55, 0.08);
 }
 
 .header {
@@ -13,33 +29,22 @@
   flex-wrap: wrap;
 }
 
-.taskTitle {
+.name {
   font-size: 1.15rem;
   font-weight: 700;
   color: var(--text-primary);
 }
 
-.description {
+.meta {
   margin-top: 14px;
   font-size: 1rem;
   color: var(--text-secondary);
 }
 
-.dueAt {
+.secondary {
   margin-top: 8px;
   font-size: 0.95rem;
   color: var(--text-secondary);
-}
-
-.primaryAction {
-  margin-top: 18px;
-  min-height: 46px;
-  border-radius: 14px;
-  font-weight: 700;
-}
-
-.primaryActionFilled {
-  background: var(--green);
 }
 
 @media (max-width: 768px) {
@@ -48,7 +53,7 @@
     border-radius: 16px;
   }
 
-  .taskTitle {
+  .name {
     font-size: 1.05rem;
   }
 }

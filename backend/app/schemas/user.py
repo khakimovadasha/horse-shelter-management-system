@@ -16,3 +16,8 @@ class UpdateUserRoleRequest(BaseModel):
 
 class UpdateUserActiveRequest(BaseModel):
     is_active: bool
+
+
+class UserProfileSummaryRead(BaseModel):
+    curated_horses_count: int
+    my_tasks_count: int

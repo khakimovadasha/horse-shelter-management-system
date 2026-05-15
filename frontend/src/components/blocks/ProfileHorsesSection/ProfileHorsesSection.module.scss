@@ -1,0 +1,38 @@
+.content {
+  display: grid;
+  gap: 18px;
+}
+
+.filters {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.filterSelect {
+  width: min(260px, 100%);
+
+  :global(.q-field__control) {
+    min-height: 44px;
+    border-radius: 14px;
+  }
+}
+
+.list {
+  display: grid;
+  gap: 20px;
+}
+
+.pagination {
+  margin-top: 4px;
+}
+
+.empty {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .filterSelect {
+    width: 100%;
+  }
+}

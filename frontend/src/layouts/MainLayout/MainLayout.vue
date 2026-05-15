@@ -190,6 +190,7 @@ const baseNavItems = [
   { label: 'Финансы', to: '/app/finances', icon: 'attach_money' },
   { label: 'Отчёты', to: '/app/reports', icon: 'description' },
   { label: 'Пользователи', to: '/app/users', icon: 'group' },
+  { label: 'Профиль', to: '/app/profile', icon: 'person' },
 ]
 
 const navItems = computed(() => {

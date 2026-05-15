@@ -7,11 +7,24 @@
 
     <div :class="$style.description">{{ description }}</div>
     <div :class="$style.dueAt">{{ dueAt }}</div>
+
+    <AppButton
+      v-if="actionLabel"
+      :label="actionLabel"
+      :disable="actionDisabled"
+      :unelevated="actionFilled"
+      :outline="!actionFilled"
+      :class="[$style.primaryAction, actionFilled && $style.primaryActionFilled]"
+      @click="$emit('action-click')"
+    />
   </article>
 </template>
 
 <script setup>
+import AppButton from 'src/components/ui/AppButton/AppButton.vue'
 import AppStatusBadge from 'src/components/ui/AppStatusBadge/AppStatusBadge.vue'
+
+defineEmits(['action-click'])
 
 defineProps({
   taskTitle: {
@@ -33,6 +46,18 @@ defineProps({
   statusTone: {
     type: String,
     required: true,
+  },
+  actionLabel: {
+    type: String,
+    default: '',
+  },
+  actionFilled: {
+    type: Boolean,
+    default: false,
+  },
+  actionDisabled: {
+    type: Boolean,
+    default: false,
   },
 })
 </script>

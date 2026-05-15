@@ -71,6 +71,7 @@
 
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { Notify } from 'quasar'
 import { createHorse } from 'src/api/horses'
@@ -88,6 +89,7 @@ import { canCreateHorse } from 'src/utils/permissions'
 const horsesStore = useHorsesStore()
 const currentUserStore = useCurrentUserStore()
 const usersStore = useUsersStore()
+const route = useRoute()
 
 const { items: horses, loading, error } = storeToRefs(horsesStore)
 const { user: currentUser } = storeToRefs(currentUserStore)
@@ -217,9 +219,24 @@ const handleCreateHorse = async (payload) => {
   }
 }
 
+const applyStatusFromRoute = () => {
+  const routeStatus = typeof route.query.status === 'string' ? route.query.status : 'all'
+
+  selectedStatus.value = ['all', 'healthy', 'sick', 'rehabilitation', 'deceased'].includes(routeStatus)
+    ? routeStatus
+    : 'all'
+}
+
 watch([searchQuery, selectedStatus, selectedSort], () => {
   currentPage.value = 1
 })
+
+watch(
+  () => route.query.status,
+  () => {
+    applyStatusFromRoute()
+  }
+)
 
 watch(totalPages, (pages) => {
   if (currentPage.value > pages) {
@@ -228,6 +245,8 @@ watch(totalPages, (pages) => {
 })
 
 onMounted(async () => {
+  applyStatusFromRoute()
+
   await Promise.all([
     horsesStore.fetchHorses().catch(() => {}),
     currentUserStore.fetchCurrentUser().catch(() => {}),

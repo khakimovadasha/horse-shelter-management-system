@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { getHorses } from 'src/api/horses'
+import { useProfileStore } from 'src/stores/profile'
 
 export const useHorsesStore = defineStore('horses', {
   state: () => ({
@@ -34,12 +35,16 @@ export const useHorsesStore = defineStore('horses', {
     },
 
     prependHorse(horse) {
+      const profileStore = useProfileStore()
       this.items = [horse, ...this.items.filter((item) => item.id !== horse.id)]
+      profileStore.syncHorse(horse)
       this.loaded = true
     },
 
     updateHorse(horse) {
+      const profileStore = useProfileStore()
       this.items = this.items.map((item) => (item.id === horse.id ? horse : item))
+      profileStore.syncHorse(horse)
       this.loaded = true
     },
   },

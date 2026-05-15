@@ -8,38 +8,42 @@
     <section :class="$style.statsGrid">
       <AppStatCard
         title="Всего лошадей"
-        value="5"
+        :value="String(totalHorses)"
         subtitle="в приюте"
         icon="favorite_border"
         tone="neutral"
         value-tone="default"
+        to="/app/horses"
       />
 
       <AppStatCard
-        title="Активные задачи"
-        value="2"
-        subtitle="требуют внимания"
+        title="Запланировано задач"
+        :value="String(plannedTasksCount)"
+        subtitle="ожидают выполнения"
         icon="task_alt"
         tone="info"
         value-tone="default"
+        to="/app/tasks"
       />
 
       <AppStatCard
         title="Запланировано процедур"
-        value="3"
-        subtitle="на ближайшее время"
+        :value="String(plannedProceduresCount)"
+        subtitle="ожидают выполнения"
         icon="monitor_heart"
         tone="success"
         value-tone="default"
+        to="/app/procedures"
       />
 
       <AppStatCard
-        title="Требуют внимания"
-        value="3"
-        subtitle="просроченные элементы"
+        title="Больные лошади"
+        :value="String(sickHorsesCount)"
+        subtitle="требуют наблюдения"
         icon="error_outline"
         tone="danger"
         value-tone="default"
+        to="/app/horses?status=sick"
       />
     </section>
 
@@ -56,9 +60,11 @@ import { computed, onMounted } from 'vue'
 import DashboardUpcomingProceduresSection from 'src/components/blocks/DashboardUpcomingProceduresSection/DashboardUpcomingProceduresSection.vue'
 import DashboardUpcomingTasksSection from 'src/components/blocks/DashboardUpcomingTasksSection/DashboardUpcomingTasksSection.vue'
 import AppStatCard from 'src/components/ui/AppStatCard/AppStatCard.vue'
+import { useHorsesStore } from 'src/stores/horses'
 import { useProceduresStore } from 'src/stores/procedures'
 import { useTasksStore } from 'src/stores/tasks'
 
+const horsesStore = useHorsesStore()
 const proceduresStore = useProceduresStore()
 const tasksStore = useTasksStore()
 
@@ -68,6 +74,22 @@ const todayLabel = computed(() =>
     month: 'long',
     year: 'numeric',
   }).format(new Date())
+)
+
+const totalHorses = computed(() => horsesStore.items.length)
+
+const plannedTasksCount = computed(
+  () => tasksStore.items.filter((task) => task.status !== 'completed').length
+)
+
+const plannedProceduresCount = computed(
+  () =>
+    proceduresStore.items.filter((procedure) => procedure.status !== 'completed')
+      .length
+)
+
+const sickHorsesCount = computed(
+  () => horsesStore.items.filter((horse) => horse.status === 'sick').length
 )
 
 const formatShortDateTime = (value) => {
@@ -168,6 +190,7 @@ const upcomingTasks = computed(() =>
 
 onMounted(async () => {
   await Promise.allSettled([
+    horsesStore.fetchHorses(),
     proceduresStore.fetchProcedures(),
     tasksStore.fetchTasks(),
   ])

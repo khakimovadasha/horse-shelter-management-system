@@ -1,5 +1,9 @@
 <template>
-  <article :class="$style.card">
+  <component
+    :is="rootTag"
+    :to="to || undefined"
+    :class="[$style.card, to && $style.cardLink]"
+  >
     <h3 :class="$style.title">{{ title }}</h3>
 
     <div :class="$style.content">
@@ -12,11 +16,12 @@
         <q-icon :name="icon" :class="$style.icon" />
       </div>
     </div>
-  </article>
+  </component>
 </template>
 
 <script setup>
 import { computed, useCssModule } from 'vue'
+import { RouterLink } from 'vue-router'
 
 const props = defineProps({
   title: {
@@ -43,9 +48,15 @@ const props = defineProps({
     type: String,
     default: 'default',
   },
+  to: {
+    type: String,
+    default: '',
+  },
 })
 
 const $style = useCssModule()
+
+const rootTag = computed(() => (props.to ? RouterLink : 'article'))
 
 const iconToneClass = computed(() => {
   switch (props.tone) {

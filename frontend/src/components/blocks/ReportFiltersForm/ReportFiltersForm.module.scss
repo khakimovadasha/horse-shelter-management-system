@@ -1,0 +1,20 @@
+.form {
+  width: 100%;
+}
+
+.checkboxField {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  padding-top: 24px;
+
+  :global(.q-checkbox__label) {
+    font-size: 16px;
+    color: #243043;
+  }
+
+  @media (max-width: 768px) {
+    padding-top: 0;
+    min-height: auto;
+  }
+}

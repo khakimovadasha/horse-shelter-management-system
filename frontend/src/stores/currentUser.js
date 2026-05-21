@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { getMe } from 'src/api/auth'
 import { useProfileStore } from 'src/stores/profile'
+import { useReportsStore } from 'src/stores/reports'
 
 export const useCurrentUserStore = defineStore('currentUser', {
   state: () => ({
@@ -13,7 +14,9 @@ export const useCurrentUserStore = defineStore('currentUser', {
   actions: {
     clearCurrentUser() {
       const profileStore = useProfileStore()
+      const reportsStore = useReportsStore()
       profileStore.clearProfile()
+      reportsStore.clearReports()
       this.user = null
       this.loading = false
       this.error = ''

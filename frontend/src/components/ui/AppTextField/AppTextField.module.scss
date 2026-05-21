@@ -1,7 +1,7 @@
 .root {
   :deep(.q-field__control) {
     min-height: 56px;
-    border-radius: 16px;
+    border-radius: var(--app-field-radius, 16px);
     background: #fff;
     color: #233044;
   }
@@ -21,6 +21,7 @@
 
   :deep(.q-field__control:before) {
     border: 1px solid #dbe2eb;
+    border-radius: var(--app-field-radius, 16px);
   }
 
   :deep(.q-field__control:hover:before) {
@@ -30,6 +31,7 @@
   :deep(.q-field--focused .q-field__control:before),
   :deep(.q-field--focused .q-field__control:after) {
     border-color: #2f6f3e;
+    border-radius: var(--app-field-radius, 16px);
   }
 
   :deep(.q-field--textarea .q-field__control) {

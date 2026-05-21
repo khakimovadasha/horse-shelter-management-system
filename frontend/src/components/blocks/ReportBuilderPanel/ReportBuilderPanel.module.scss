@@ -1,0 +1,16 @@
+.form {
+  display: grid;
+  gap: 20px;
+}
+
+@media (max-width: 420px) {
+  .form {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 320px) {
+  .form {
+    gap: 12px;
+  }
+}

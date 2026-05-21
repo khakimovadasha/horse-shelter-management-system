@@ -1,0 +1,12 @@
+.control {
+  :global(.q-field__control) {
+    border-radius: 12px !important;
+    overflow: hidden;
+  }
+
+  :global(.q-field__control),
+  :global(.q-field__control::before),
+  :global(.q-field__control::after) {
+    border-radius: 12px !important;
+  }
+}

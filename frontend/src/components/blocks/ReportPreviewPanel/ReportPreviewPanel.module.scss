@@ -1,0 +1,252 @@
+.layout {
+  display: grid;
+  gap: 24px;
+
+  @media (max-width: 420px) {
+    gap: 18px;
+  }
+
+  @media (max-width: 320px) {
+    gap: 14px;
+  }
+}
+
+.metaSection {
+  display: grid;
+  gap: 16px;
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.section,
+.summarySections,
+.detailSections {
+  display: grid;
+  gap: 20px;
+}
+
+.cards,
+.mobileList {
+  display: grid;
+  gap: 18px;
+
+  @media (max-width: 420px) {
+    gap: 14px;
+  }
+
+  @media (max-width: 320px) {
+    gap: 10px;
+  }
+}
+
+.nestedTitle {
+  margin-bottom: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2f46;
+
+  @media (max-width: 420px) {
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+
+  @media (max-width: 360px) {
+    margin-bottom: 8px;
+    font-size: 15px;
+  }
+
+  @media (max-width: 320px) {
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+}
+
+.horseCard,
+.detailCard,
+.nestedSection {
+  padding: 20px;
+  border: 1px solid #dbe4f0;
+  border-radius: 24px;
+  background: #fff;
+
+  @media (max-width: 420px) {
+    padding: 14px 12px;
+    border-radius: 18px;
+  }
+
+  @media (max-width: 320px) {
+    padding: 10px 8px;
+    border-radius: 14px;
+  }
+}
+
+.nestedSection {
+  margin: 10px 0px;
+
+  @media (max-width: 320px) {
+    margin: 6px 0px;
+  }
+}
+
+.nestedSection {
+  @media (max-width: 768px) {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 18px;
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+  }
+
+  @media (max-width: 320px) {
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.1;
+  color: #1f2f46;
+
+  @media (max-width: 420px) {
+    font-size: 22px;
+  }
+
+  @media (max-width: 360px) {
+    font-size: 20px;
+  }
+
+  @media (max-width: 320px) {
+    font-size: 18px;
+  }
+}
+
+.cardSubtitle {
+  margin: 6px 0 0;
+  color: #6b7b92;
+
+  @media (max-width: 420px) {
+    font-size: 0.92rem;
+  }
+
+  @media (max-width: 360px) {
+    font-size: 0.86rem;
+  }
+
+  @media (max-width: 320px) {
+    margin-top: 4px;
+    font-size: 0.78rem;
+  }
+}
+
+.horseInfoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 20px;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+
+  @media (max-width: 320px) {
+    gap: 10px;
+  }
+}
+
+.infoItem {
+  display: grid;
+  gap: 4px;
+
+  span {
+    color: #7a8aa3;
+    font-size: 13px;
+
+    @media (max-width: 360px) {
+      font-size: 12px;
+    }
+
+    @media (max-width: 320px) {
+      font-size: 11px;
+    }
+  }
+
+  strong {
+    color: #1f2f46;
+    font-size: 16px;
+
+    @media (max-width: 420px) {
+      font-size: 14px;
+    }
+
+    @media (max-width: 360px) {
+      font-size: 13px;
+    }
+
+    @media (max-width: 320px) {
+      font-size: 12px;
+    }
+  }
+}
+
+.textBlock {
+  margin-top: 16px;
+  color: #475569;
+  line-height: 1.6;
+
+  @media (max-width: 420px) {
+    margin-top: 12px;
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 360px) {
+    font-size: 0.86rem;
+    line-height: 1.45;
+  }
+
+  @media (max-width: 320px) {
+    margin-top: 10px;
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+}
+
+.nestedList {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+  color: #475569;
+  line-height: 1.5;
+
+  @media (max-width: 320px) {
+    padding-left: 14px;
+    gap: 6px;
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+}
+
+.summaryTable {
+  margin-bottom: 8px;
+}

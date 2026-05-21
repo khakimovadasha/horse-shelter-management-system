@@ -2,17 +2,14 @@ FROM node:22-alpine AS build
 
 WORKDIR /app
 
-COPY frontend/package*.json ./
-
-RUN npm install
-
-COPY frontend .
+COPY frontend/ ./
 
 ARG VITE_API_BASE_URL
 ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 
-RUN npm run build
+RUN npm install
 
+RUN npm run build
 
 FROM nginx:alpine
 

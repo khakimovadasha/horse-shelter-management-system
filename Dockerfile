@@ -12,4 +12,4 @@ RUN mkdir -p media
 
 EXPOSE 80
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 80"]
